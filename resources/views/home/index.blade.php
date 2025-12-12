@@ -7,7 +7,7 @@
     <div class="relative w-full h-[600px] flex items-center">
 
         <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=2070&auto=format&fit=crop"
-            alt="Background Court" class="absolute inset-0 w-full h-full object-cover z-0">
+            alt="Background venue" class="absolute inset-0 w-full h-full object-cover z-0">
 
         <div class="absolute inset-0 bg-black/50 z-10"></div>
 
@@ -116,22 +116,22 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-end mb-8">
                 <h2 class="text-3xl font-bold text-gray-900">Rekomendasi Lapangan</h2>
-                <a href="{{ url('/courts') }}" class="text-ayo-red font-semibold hover:underline">Lihat Semua</a>
+                <a href="{{ url('/venues') }}" class="text-ayo-red font-semibold hover:underline">Lihat Semua</a>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                @foreach ($courts as $court)
+                @foreach ($venues as $venue)
                     <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition duration-300">
                         <div class="h-48 bg-gray-300 relative">
-                            <img src="https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&q=80"
-                                alt="{{ $court->name }}" class="w-full h-full object-cover">
+                            <img src="{{ $venue->venue_image }}"
+                                alt="{{ $venue->name }}" class="w-full h-full object-cover">
                             <span class="absolute top-4 left-4 bg-white text-xs font-bold px-2 py-1 rounded text-gray-800">
-                                {{ $court->type }}
+                                {{ $venue->type }}
                             </span>
                         </div>
 
                         <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ $court->name }}</h3>
+                            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ $venue->name }}</h3>
                             <p class="text-gray-500 text-sm mb-4">
                                 <i class="fas fa-map-marker-alt mr-1"></i> Jakarta Selatan (Dummy Location)
                             </p>
@@ -142,9 +142,9 @@
                                 <div>
                                     <p class="text-xs text-gray-400">Mulai dari</p>
                                     <p class="text-ayo-red font-bold text-lg">Rp
-                                        {{ number_format($court->price_per_hour, 0, ',', '.') }}/jam</p>
+                                        {{ number_format($venue->price_per_hour, 0, ',', '.') }}/jam</p>
                                 </div>
-                                <a href="{{ url('/courts/' . $court->id) }}"
+                                <a href="{{ url('/venues/' . $venue->id) }}"
                                     class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition">
                                     Detail
                                 </a>
