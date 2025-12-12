@@ -49,7 +49,6 @@
             background-color: var(--light);
             color: var(--dark);
             line-height: 1.6;
-            padding-top: 80px;
         }
 
         /* ===== NAVBAR ===== */
@@ -729,19 +728,8 @@
         .legal-link:hover {
             color: white;
         }
-
-        /* Active indicator */
-        .nav-item.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 3px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border-radius: 2px;
-        }
+        
+        
     </style>
     @stack('styles')
 </head>
@@ -753,10 +741,7 @@
             <div class="navbar-content">
                 <!-- Brand Logo -->
                 <a class="navbar-brand" href="/">
-                    <div class="brand-logo">
-                        <i class="bi bi-trophy-fill"></i>
-                    </div>
-                    <span class="brand-name">Meraket</span>
+                    <img src="{{ asset('images/logo meraket.png') }}" alt="Logo">
                 </a>
 
                 <!-- Desktop Navigation Links - Center -->
