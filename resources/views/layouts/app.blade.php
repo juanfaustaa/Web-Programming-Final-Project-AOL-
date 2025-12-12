@@ -742,8 +742,6 @@
         .legal-link:hover {
             color: white;
         }
-        
-        
     </style>
     @stack('styles')
 </head>
@@ -768,7 +766,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/venues">
+                            <a class="nav-link" href="/venue">
                                 <i class="bi bi-basket nav-icon"></i>
                                 <span class="nav-text">Venues</span>
                             </a>

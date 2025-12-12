@@ -4,87 +4,148 @@
 
 @section('content')
 
-    <div class="relative w-full h-[600px] flex items-center">
+    <div class="relative w-full h-[650px] flex items-center justify-center overflow-hidden">
 
-        <img src="https://images.unsplash.com/photo-1554068865-24cecd4e34b8?q=80&w=2070&auto=format&fit=crop"
-            alt="Background venue" class="absolute inset-0 w-full h-full object-cover z-0">
+        <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=2070&auto=format&fit=crop"
+            alt="Court Background" class="absolute inset-0 w-full h-full object-cover z-0 filter brightness-[0.4]">
 
-        <div class="absolute inset-0 bg-black/50 z-10"></div>
+        <div class="absolute inset-0 bg-gradient-to-tr from-gray-900 via-transparent to-orange-900/40 z-10"></div>
 
-        <div class="relative z-20 container mx-auto px-6 md:px-12 text-white">
+        <div class="relative z-20 container mx-auto px-6 md:px-12 text-center">
 
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight drop-shadow-lg">
-                Super Sport <br>
-                Community App
+            <div class="inline-block mb-6 animate-fade-in-down">
+                <span
+                    class="py-1 px-3 rounded-full bg-orange-500/20 border border-[#FF6700] text-[#FF6700] text-sm font-bold tracking-widest uppercase backdrop-blur-sm">
+                    Platform Sewa Lapangan
+                </span>
+            </div>
+
+            <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-tight drop-shadow-2xl">
+                Main Lebih Seru, <br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6700] to-yellow-400">Booking Lebih
+                    Cepat.</span>
             </h1>
 
-            <p class="text-lg md:text-xl mb-8 max-w-2xl drop-shadow-md text-gray-200">
-                Platform all-in-one untuk sewa lapangan, cari lawan sparring, atau
-                cari kawan main bareng. Olahraga makin mudah dan menyenangkan!
+            <p class="text-lg md:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+                Akses lapangan Padel, Tennis, Badminton, dan Pickleball terbaik langsung dari browser Anda.
+                Cek jadwal real-time, bayar aman, langsung main.
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-4">
-                <button
-                    class="flex items-center bg-white text-gray-900 px-5 py-3 rounded-lg font-bold hover:bg-gray-100 transition shadow-lg w-fit">
-                    <i class="fab fa-google-play text-2xl mr-3"></i>
-                    <div class="text-left leading-tight">
-                        <span class="block text-[10px] font-semibold uppercase text-gray-500">Get it on</span>
-                        <span class="block text-lg">Google Play</span>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                <a href="{{ url('/venue') }}"
+                    class="group relative px-8 py-4 bg-[#FF6700] rounded-full text-white font-bold text-lg shadow-[0_0_20px_rgba(255,103,0,0.5)] hover:shadow-[0_0_40px_rgba(255,103,0,0.8)] transition-all duration-300 transform hover:-translate-y-1 overflow-hidden">
+                    <span class="relative z-10 flex items-center gap-2">
+                        Cari Lapangan <i class="fas fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </span>
+                    <div
+                        class="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:translate-x-0 transition-transform duration-500">
                     </div>
-                </button>
+                </a>
 
-                <button
-                    class="flex items-center bg-white text-gray-900 px-5 py-3 rounded-lg font-bold hover:bg-gray-100 transition shadow-lg w-fit">
-                    <i class="fab fa-apple text-2xl mr-3"></i>
-                    <div class="text-left leading-tight">
-                        <span class="block text-[10px] font-semibold uppercase text-gray-500">Download on the</span>
-                        <span class="block text-lg">App Store</span>
-                    </div>
-                </button>
+                <a href="{{ url('/scoreboard') }}"
+                    class="px-8 py-4 rounded-full border-2 border-white text-white font-bold text-lg hover:bg-white hover:text-gray-900 transition-all duration-300 backdrop-blur-sm flex items-center gap-2">
+                    <i class="fas fa-desktop"></i> Coba Scoreboard
+                </a>
             </div>
 
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20 z-10">
-        <div
-            class="ayo-red rounded-lg shadow-lg p-4 md:p-6 flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0 text-white">
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div class="flex-1 w-full md:border-r border-red-700 px-4">
-                <label
-                    class="block text-xs font-semibold uppercase tracking-wide opacity-80 mb-1 text-orange-500">Aktivitas</label>
-                <div class="flex items-center justify-between cursor-pointer">
-                    <span class="font-bold text-lg text-orange-500">Sewa Lapangan</span> <i
-                        class="fas fa-chevron-down text-sm"></i>
-                </div>
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-[#FF6700] font-bold tracking-widest uppercase text-sm mb-3">Kenapa Harus Meraket?</h2>
+                <h3 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-6">
+                    Tinggalkan Cara Lama, <br>
+                    <span class="underline decoration-[#FF6700] underline-offset-4">Mulai Era Digital.</span>
+                </h3>
+                <p class="text-gray-500 text-lg">
+                    Tidak perlu lagi telepon venue satu per satu. Nikmati kemudahan teknologi untuk pengalaman olahraga yang
+                    lebih seamless.
+                </p>
             </div>
 
-            <div class="flex-1 w-full md:border-r border-red-700 px-4">
-                <label
-                    class="block text-xs font-semibold uppercase tracking-wide opacity-80 mb-1 text-orange-500">Lokasi</label>
-                <div class="flex items-center justify-between cursor-pointer">
-                    <span class="font-bold text-lg text-orange-500">Jakarta Selatan</span>
-                    <i class="fas fa-map-marker-alt text-sm"></i>
-                </div>
-            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
-            <div class="flex-1 w-full px-4">
-                <label class="block text-xs font-semibold uppercase tracking-wide opacity-80 mb-1 text-orange-500">Cabang
-                    Olahraga</label>
-                <div class="flex items-center justify-between cursor-pointer">
-                    <span class="font-bold text-lg text-orange-500">Padel</span>
-                    <i class="fas fa-futbol text-sm"></i>
-                </div>
-            </div>
+                <div
+                    class="group relative p-8 bg-gray-50 rounded-3xl border border-gray-100 hover:border-[#FF6700] transition-all duration-500 hover:shadow-2xl hover:shadow-orange-100 hover:-translate-y-2 cursor-default overflow-hidden">
+                    <div
+                        class="absolute -right-10 -top-10 w-40 h-40 bg-orange-100 rounded-full transition-transform duration-500 group-hover:scale-[10]">
+                    </div>
 
-            <div class="pl-4">
-                <button
-                    class="bg-white text-ayo-red px-8 py-3 rounded font-bold hover:bg-gray-100 text-orange-500 transition shadow-md">
-                    Temukan <i class="fas fa-arrow-right ml-2"></i>
-                </button>
+                    <div class="relative z-10">
+                        <div
+                            class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8 text-3xl text-[#FF6700] group-hover:text-white group-hover:bg-[#FF6700] transition-colors duration-300">
+                            <i class="far fa-calendar-check"></i>
+                        </div>
+
+                        <h4 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-gray-800">Booking Real-time</h4>
+                        <p class="text-gray-600 leading-relaxed mb-6 group-hover:text-gray-700">
+                            Cek ketersediaan lapangan Padel atau Badminton detik ini juga. Slot waktu selalu update tanpa
+                            perlu konfirmasi manual.
+                        </p>
+
+                        <div
+                            class="flex items-center text-[#FF6700] font-bold opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                            Cari Lapangan <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="group relative p-8 bg-gray-50 rounded-3xl border border-gray-100 hover:border-[#FF6700] transition-all duration-500 hover:shadow-2xl hover:shadow-orange-100 hover:-translate-y-2 cursor-default overflow-hidden">
+                    <div
+                        class="absolute -right-10 -top-10 w-40 h-40 bg-orange-100 rounded-full transition-transform duration-500 group-hover:scale-[10]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8 text-3xl text-[#FF6700] group-hover:text-white group-hover:bg-[#FF6700] transition-colors duration-300">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+
+                        <h4 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-gray-800">Pembayaran Aman</h4>
+                        <p class="text-gray-600 leading-relaxed mb-6 group-hover:text-gray-700">
+                            Sistem pembayaran terintegrasi dengan QRIS dan Virtual Account. Transaksi aman, status booking
+                            langsung aktif.
+                        </p>
+
+                        <div
+                            class="flex items-center text-[#FF6700] font-bold opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                            Pelajari Metode <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="group relative p-8 bg-gray-50 rounded-3xl border border-gray-100 hover:border-[#FF6700] transition-all duration-500 hover:shadow-2xl hover:shadow-orange-100 hover:-translate-y-2 cursor-default overflow-hidden">
+                    <div
+                        class="absolute -right-10 -top-10 w-40 h-40 bg-orange-100 rounded-full transition-transform duration-500 group-hover:scale-[10]">
+                    </div>
+
+                    <div class="relative z-10">
+                        <div
+                            class="w-16 h-16 bg-white rounded-2xl shadow-md flex items-center justify-center mb-8 text-3xl text-[#FF6700] group-hover:text-white group-hover:bg-[#FF6700] transition-colors duration-300">
+                            <i class="fas fa-tablet-alt"></i>
+                        </div>
+
+                        <h4 class="text-2xl font-bold text-gray-900 mb-4 group-hover:text-gray-800">Scoreboard Digital</h4>
+                        <p class="text-gray-600 leading-relaxed mb-6 group-hover:text-gray-700">
+                            Lupakan papan skor manual. Catat poin pertandinganmu dengan mudah menggunakan fitur Scoreboard
+                            web kami.
+                        </p>
+
+                        <div
+                            class="flex items-center text-[#FF6700] font-bold opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500">
+                            Mulai Hitung Skor <i class="fas fa-long-arrow-alt-right ml-2"></i>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
-    </div>
+    </section>
 
     <section class="py-16 bg-gray-900 overflow-hidden relative">
 
@@ -208,7 +269,7 @@
                 </div>
 
                 <div class="court-card group">
-                    <img src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?q=80&w=1000&auto=format&fit=crop"
+                    <img src="https://plus.unsplash.com/premium_photo-1663045882560-3bdd5f71687c?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         alt="Tennis Court">
 
@@ -233,7 +294,7 @@
                 </div>
 
                 <div class="court-card group">
-                    <img src="https://images.unsplash.com/photo-1599391398131-cd12dfc6c24e?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    <img src="https://images.unsplash.com/photo-1521537634581-0dced2fee2ef?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
                         class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                         alt="Badminton Court">
 
@@ -286,41 +347,124 @@
         </div>
     </section>
 
-    <section class="bg-gray-100 py-16">
+    <section class="bg-gray-50 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-end mb-8">
-                <h2 class="text-3xl font-bold text-gray-900">Rekomendasi Lapangan</h2>
-                <a href="{{ url('/venues') }}" class="text-ayo-red font-semibold hover:underline">Lihat Semua</a>
+
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                <div>
+                    <span
+                        class="text-[#FF6700] font-bold tracking-widest uppercase text-xs md:text-sm bg-orange-100 px-3 py-1 rounded-full">
+                        Pilihan Editor
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 mt-4 leading-tight">
+                        Rekomendasi <span class="text-[#FF6700]">Venue</span>
+                    </h2>
+                    <p class="text-gray-500 mt-2 max-w-lg">Temukan lapangan dengan rating tertinggi dan fasilitas
+                        terlengkap di dekatmu.</p>
+                </div>
+
+                <a href="{{ url('/venue') }}"
+                    class="group flex items-center gap-2 text-gray-600 font-semibold hover:text-[#FF6700] transition bg-white px-5 py-3 rounded-full border border-gray-200 shadow-sm hover:shadow-md">
+                    Lihat Semua Venue
+                    <i
+                        class="fas fa-arrow-right transform group-hover:translate-x-1 transition-transform text-[#FF6700]"></i>
+                </a>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 @foreach ($venues as $venue)
-                    <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition duration-300">
-                        <div class="h-48 bg-gray-300 relative">
+                    <div
+                        class="group bg-white rounded-3xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-2xl hover:shadow-orange-500/10 hover:border-orange-200 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
+
+                        <div class="h-60 bg-gray-200 relative overflow-hidden">
                             <img src="{{ $venue->venue_image }}" alt="{{ $venue->name }}"
-                                class="w-full h-full object-cover">
-                            <span class="absolute top-4 left-4 bg-white text-xs font-bold px-2 py-1 rounded text-gray-800">
-                                {{ $venue->type }}
-                            </span>
+                                class="w-full h-full object-cover transform transition-transform duration-700 group-hover:scale-110">
+
+                            <div
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60">
+                            </div>
+
+                            <div class="absolute top-4 left-4 flex gap-2">
+                                <span
+                                    class="bg-white/95 backdrop-blur text-gray-900 text-[10px] font-bold px-3 py-1 rounded-full shadow-sm uppercase tracking-wide border border-gray-100">
+                                    {{ $venue->type }}
+                                </span>
+                            </div>
+
+                            <div
+                                class="absolute top-4 right-4 bg-gray-900/80 backdrop-blur text-white text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
+                                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                                <span>4.8</span>
+                            </div>
+
+                            <div class="absolute bottom-4 left-4 text-white">
+                                <div class="flex items-center gap-2">
+                                    <span class="relative flex h-2.5 w-2.5">
+                                        <span
+                                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                                        <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-500"></span>
+                                    </span>
+                                    <span class="text-xs font-medium text-gray-200">Booking Now</span>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold text-gray-900 mb-1">{{ $venue->name }}</h3>
-                            <p class="text-gray-500 text-sm mb-4">
-                                <i class="fas fa-map-marker-alt mr-1"></i> Jakarta Selatan (Dummy Location)
-                            </p>
+                        <div class="p-6 flex flex-col flex-grow">
 
-                            <hr class="border-gray-100 my-4">
-
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-xs text-gray-400">Mulai dari</p>
-                                    <p class="text-ayo-red font-bold text-lg">Rp
-                                        {{ number_format($venue->price_per_hour, 0, ',', '.') }}/jam</p>
+                            <div class="mb-4">
+                                <h3
+                                    class="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#FF6700] transition-colors line-clamp-1">
+                                    {{ $venue->name }}
+                                </h3>
+                                <div class="flex items-start text-sm text-gray-500">
+                                    <i class="fas fa-map-marker-alt text-[#FF6700] mt-1 mr-2 flex-shrink-0"></i>
+                                    <span
+                                        class="line-clamp-2">{{ $venue->location ?? 'Jakarta Selatan, DKI Jakarta' }}</span>
                                 </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <p class="text-[10px] uppercase font-bold text-gray-400 tracking-wider mb-2">Fasilitas</p>
+                                <div class="flex gap-3 text-gray-400">
+                                    <div class="flex flex-col items-center gap-1" title="WiFi">
+                                        <i class="fas fa-wifi bg-gray-50 p-2 rounded-lg text-gray-500 text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1" title="Parkir">
+                                        <i class="fas fa-parking bg-gray-50 p-2 rounded-lg text-gray-500 text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1" title="Kantin">
+                                        <i class="fas fa-utensils bg-gray-50 p-2 rounded-lg text-gray-500 text-xs"></i>
+                                    </div>
+                                    <div class="flex flex-col items-center gap-1" title="Locker">
+                                        <i class="fas fa-lock bg-gray-50 p-2 rounded-lg text-gray-500 text-xs"></i>
+                                    </div>
+                                    <span class="text-xs self-center ml-auto text-gray-400">+3 Lainnya</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-dashed border-gray-200 my-auto"></div>
+
+                            <div class="flex justify-between items-center mt-5 pt-2">
+                                <div>
+                                    <p class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">Mulai Dari</p>
+                                    <div class="flex items-baseline gap-1">
+                                        <span class="text-[#FF6700] font-black text-xl">
+                                            Rp {{ number_format($venue->price_per_hour / 1000, 0) }}rb
+                                        </span>
+                                        <span class="text-xs text-gray-400 font-medium">/jam</span>
+                                    </div>
+                                </div>
+
                                 <a href="{{ url('/venues/' . $venue->id) }}"
-                                    class="bg-gray-900 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700 transition">
-                                    Detail
+                                    class="relative overflow-hidden bg-gray-900 text-white px-6 py-3 rounded-xl text-sm font-bold shadow-lg group-hover:bg-[#FF6700] group-hover:shadow-orange-500/40 transition-all duration-300 w-32 text-center">
+                                    <span
+                                        class="absolute inset-0 flex items-center justify-center transform transition-transform duration-300 group-hover:-translate-y-full">
+                                        Detail
+                                    </span>
+                                    <span
+                                        class="absolute inset-0 flex items-center justify-center transform translate-y-full transition-transform duration-300 group-hover:translate-y-0">
+                                        Booking
+                                    </span>
                                 </a>
                             </div>
                         </div>
