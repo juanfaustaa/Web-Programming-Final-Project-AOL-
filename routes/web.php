@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\CourtController as AdminCourtController;
 use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
+use App\Http\Controllers\Admin\VenueController as AdminVenueController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RatingController;
@@ -32,7 +32,7 @@ Route::post('/scoreboard/reset', [ScoreboardController::class, 'reset']);
 
 
 // User (auth)
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'is_user'])->group(function () {
     Route::post('/booking/add-to-cart', [venueController::class, 'addToCart'])->name('booking.addToCart');
     Route::get('/booking/cart', [venueController::class, 'viewCart'])->name('booking.cart');
     Route::delete('/booking/cart/{index}', [venueController::class, 'removeFromCart'])->name('booking.removeFromCart');
@@ -49,20 +49,23 @@ Route::middleware('auth')->group(function () {
 
 // Admin
 Route::prefix('admin')->middleware(['auth','is_admin'])->group(function () {
-    Route::get('/', [DashboardController::class, 'index']);
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::resource('courts', AdminCourtController::class);
+    // Venue & Court Management
+    Route::resource('venues', AdminVenueController::class);
+    
+    // Route Khusus untuk Manage Court di dalam halaman Edit Venue
+    Route::post('/venues/{venue}/courts', [AdminVenueController::class, 'storeCourt'])->name('venues.courts.store');
+    Route::delete('/courts/{court}', [AdminVenueController::class, 'destroyCourt'])->name('venues.courts.destroy');
+    Route::patch('/courts/{court}/toggle', [AdminVenueController::class, 'toggleCourtStatus'])->name('venues.courts.toggle');
 
-    Route::get('/bookings', [AdminBookingController::class, 'index']);
-    Route::post('/bookings/{id}/approve', [AdminBookingController::class, 'approve']);
-    Route::post('/bookings/{id}/reject', [AdminBookingController::class, 'reject']);
-
-    Route::get('/transactions', [TransactionController::class, 'index']);
+    // Transactions
+    Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transactions.index');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/home.index', function () {
+    return view('home.index')->name('home');
+})->middleware(['auth', 'is_user']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

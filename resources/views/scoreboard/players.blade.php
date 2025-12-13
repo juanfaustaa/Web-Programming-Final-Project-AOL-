@@ -5,17 +5,26 @@
 @section('content')
 
 <!-- Hero Section -->
-<div class="relative w-full h-[400px] flex items-center">
-    <div class="absolute inset-0 bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 z-0"></div>
-    <div class="absolute inset-0 bg-black/30 z-10"></div>
+<div class="relative w-full h-[400px] flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-tr from-gray-900 via-transparent to-orange-900/40 z-0"></div>
     
-    <div class="relative z-20 container mx-auto px-6 md:px-12 text-white">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4 leading-tight drop-shadow-lg">
-            Tournament <br>
-            Scoreboard Manager
+    <img src="https://plus.unsplash.com/premium_photo-1666913667082-c1fecc45275d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+        alt="Scoreboard Background" class="absolute inset-0 w-full h-full object-cover filter brightness-[0.4]">
+    
+    <div class="relative z-10 container mx-auto px-6 md:px-12 text-center">
+        <!-- <div class="inline-block mb-6 animate-fade-in-down">
+            <span class="py-1 px-3 rounded-full bg-orange-500/20 border border-[#FF6700] text-[#FF6700] text-sm font-bold tracking-widest uppercase backdrop-blur-sm">
+                Tournament Scoreboard
+            </span>
+        </div> -->
+        
+        <h1 class="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight leading-tight drop-shadow-2xl">
+            Input Pemain, <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6700] to-yellow-400">Mulai Pertandingan.</span>
         </h1>
-        <p class="text-lg md:text-xl mb-8 max-w-2xl drop-shadow-md text-gray-100">
-            Kelola pertandingan dengan mudah! Tambahkan pemain, atur turnamen, dan pantau skor secara real-time.
+        
+        <p class="text-lg md:text-2xl text-gray-200 mb-10 max-w-3xl mx-auto font-light leading-relaxed">
+            Tambahkan pemain untuk pertandingan Padel, Tennis, Badminton, dan Pickleball. Atur turnamen dan pantau skor secara real-time.
         </p>
     </div>
 </div>
@@ -61,7 +70,7 @@
                                 </div>
                                 <input type="text" 
                                        name="name" 
-                                       class="pl-10 w-full px-5 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition"
+                                       class="pl-10 w-full px- py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition"
                                        placeholder="Masukkan nama pemain"
                                        required
                                        maxlength="50">

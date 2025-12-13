@@ -1,815 +1,507 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title') - Admin Panel</title>
-    
-    <!-- Bootstrap 5 CSS -->
+    <title>@yield('title', 'Dashboard') - Admin Meraket</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <!-- ApexCharts -->
-    <link href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.css" rel="stylesheet">
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <style>
         :root {
             --sidebar-width: 280px;
-            --primary-color: #4361ee;
-            --secondary-color: #3a0ca3;
-            --success-color: #4cc9f0;
-            --warning-color: #f72585;
-            --info-color: #7209b7;
-            --light-bg: #f8fafc;
+            --primary-color: #FF6700;
+            --primary-hover: #ff8533;
+            --sidebar-bg-start: #0f172a;
+            /* Darker Navy */
+            --sidebar-bg-end: #1e293b;
+            /* Lighter Navy */
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #334155;
+            --bg-body: #f1f5f9;
         }
-        
+
         body {
-            background-color: #f5f7fb;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
         }
-        
-        /* Sidebar Styling */
+
+        /* --- 1. SIDEBAR PREMIUM --- */
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
             width: var(--sidebar-width);
             height: 100vh;
-            background: linear-gradient(180deg, #1a237e 0%, #283593 100%);
+            /* Gradasi Halus untuk kedalaman */
+            background: linear-gradient(180deg, var(--sidebar-bg-start) 0%, var(--sidebar-bg-end) 100%);
             color: white;
             z-index: 1000;
-            transition: all 0.3s ease;
-            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
+
         .sidebar-header {
-            padding: 25px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            /* Sedikit lebih gelap di header */
         }
-        
+
         .sidebar-brand {
+            text-decoration: none;
             display: flex;
             align-items: center;
             gap: 15px;
         }
-        
-        .sidebar-brand-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(45deg, #4361ee, #3a0ca3);
+
+        .brand-icon-box {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #FF6700, #ff9100);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+            font-size: 1.4rem;
+            color: white;
+            box-shadow: 0 0 15px rgba(255, 103, 0, 0.4);
+            /* Glow Effect */
+            transition: transform 0.3s ease;
         }
-        
+
+        .sidebar-brand:hover .brand-icon-box {
+            transform: rotate(10deg) scale(1.05);
+            /* Animasi ikon saat hover logo */
+        }
+
+        .brand-text h4 {
+            font-weight: 800;
+            margin: 0;
+            color: white;
+            font-size: 1.25rem;
+            letter-spacing: -0.5px;
+        }
+
         .sidebar-menu {
-            padding: 20px 0;
-            height: calc(100vh - 130px);
+            padding: 20px 16px;
+            flex-grow: 1;
             overflow-y: auto;
         }
-        
-        .sidebar-menu::-webkit-scrollbar {
-            width: 5px;
+
+        .nav-title {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #94a3b8;
+            font-weight: 700;
+            margin: 20px 0 10px 10px;
         }
-        
-        .sidebar-menu::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .sidebar-menu::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-        
-        .nav-item {
-            margin-bottom: 5px;
-        }
-        
+
         .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 15px 25px;
-            border-left: 4px solid transparent;
+            color: #cbd5e1;
+            padding: 13px 16px;
+            border-radius: 12px;
+            margin-bottom: 5px;
             transition: all 0.3s ease;
             font-weight: 500;
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
+            position: relative;
+            overflow: hidden;
         }
-        
-        .nav-link:hover, .nav-link.active {
+
+        /* Efek Hover Menu */
+        .nav-link:hover {
             color: white;
-            background: rgba(255, 255, 255, 0.1);
-            border-left-color: #4cc9f0;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(3px);
         }
-        
+
+        /* Active State dengan Glow Orange */
+        .nav-link.active {
+            background: linear-gradient(90deg, rgba(255, 103, 0, 0.15), transparent);
+            color: #FF6700;
+            border-left: 3px solid #FF6700;
+            border-radius: 4px 12px 12px 4px;
+            /* Unik shape */
+        }
+
         .nav-link i {
-            font-size: 1.2rem;
-            width: 25px;
+            font-size: 1.15rem;
+            transition: 0.3s;
         }
-        
-        .badge-notification {
-            background: linear-gradient(45deg, #f72585, #b5179e);
-            color: white;
-            font-size: 0.7rem;
-            padding: 3px 8px;
-            border-radius: 20px;
-            margin-left: auto;
+
+        .nav-link.active i {
+            color: #FF6700;
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 5px rgba(255, 103, 0, 0.5));
         }
-        
-        .main-content {
-            margin-left: var(--sidebar-width);
-            padding: 20px;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-        }
-        
-        /* Navbar Styling */
+
+        /* --- 2. GLASS NAVBAR --- */
         .navbar-admin {
-            background: white;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 15px 30px;
             margin-left: var(--sidebar-width);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 18px 30px;
             position: sticky;
             top: 0;
             z-index: 100;
             transition: all 0.3s ease;
+
+            /* Glassmorphism Effect */
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
         }
-        
-        .search-box {
+
+        /* Search Bar Animasi */
+        .search-group {
             position: relative;
-            max-width: 400px;
+            width: 280px;
+            transition: width 0.4s ease;
         }
-        
-        .search-box input {
-            padding-left: 45px;
-            border-radius: 10px;
+
+        /* Melebar saat fokus */
+        .search-group:focus-within {
+            width: 380px;
+        }
+
+        .search-group input {
+            background: white;
             border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
+            padding: 10px 10px 10px 45px;
+            border-radius: 50px;
+            /* Fully rounded */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s;
         }
-        
-        .search-box input:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+
+        .search-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(255, 103, 0, 0.15);
+            outline: none;
         }
-        
+
         .search-icon {
             position: absolute;
-            left: 15px;
+            left: 18px;
             top: 50%;
             transform: translateY(-50%);
             color: #94a3b8;
+            pointer-events: none;
         }
-        
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: linear-gradient(45deg, #f72585, #b5179e);
-            color: white;
-            font-size: 0.7rem;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        /* --- 3. MAIN CONTENT ANIMATION --- */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 30px;
+            min-height: 100vh;
+
+            /* Animasi Masuk */
+            animation: fadeInUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
-        
-        .user-dropdown-toggle {
-            border: none;
-            background: transparent;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 5px 15px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
-        .user-dropdown-toggle:hover {
-            background: #f1f5f9;
-        }
-        
-        .user-avatar {
+
+        /* --- 4. INTERACTIVE ELEMENTS --- */
+        .btn-icon-hover {
             width: 40px;
             height: 40px;
-            background: linear-gradient(45deg, #4361ee, #3a0ca3);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
+            transition: all 0.3s;
+            background: transparent;
+            color: #64748b;
         }
-        
-        /* Dashboard Cards */
-        .stats-card {
+
+        .btn-icon-hover:hover {
+            background: #fff0e6;
+            /* Orange muda banget */
+            color: #FF6700;
+            transform: translateY(-2px);
+        }
+
+        .user-profile-btn {
             background: white;
-            border-radius: 15px;
-            padding: 25px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
+            border: 1px solid #e2e8f0;
+            padding: 6px 15px 6px 6px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            cursor: pointer;
         }
-        
-        .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
+        .user-profile-btn:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
-        
-        .stats-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 15px;
+
+        .avatar-circle {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #1e293b, #334155);
+            color: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-        }
-        
-        .stats-icon-primary {
-            background: linear-gradient(45deg, #4361ee, #3a0ca3);
-            color: white;
-        }
-        
-        .stats-icon-success {
-            background: linear-gradient(45deg, #4cc9f0, #4895ef);
-            color: white;
-        }
-        
-        .stats-icon-warning {
-            background: linear-gradient(45deg, #f72585, #b5179e);
-            color: white;
-        }
-        
-        .stats-icon-info {
-            background: linear-gradient(45deg, #7209b7, #560bad);
-            color: white;
-        }
-        
-        .stats-number {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            background: linear-gradient(45deg, #1a237e, #283593);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .trend-up {
-            color: #10b981;
+            font-size: 0.9rem;
             font-weight: 600;
         }
-        
-        .trend-down {
-            color: #ef4444;
-            font-weight: 600;
+
+        /* Pulse Animation for Notification */
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #ef4444;
+            border-radius: 50%;
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            box-shadow: 0 0 0 rgba(239, 68, 68, 0.4);
+            animation: pulse-red 2s infinite;
         }
-        
-        /* Charts */
-        .chart-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            height: 100%;
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+            }
         }
-        
-        .chart-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        /* Tables */
-        .data-table {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        }
-        
-        .table {
-            margin-bottom: 0;
-        }
-        
-        .table thead th {
-            border-bottom: 2px solid #e2e8f0;
-            font-weight: 600;
-            color: #475569;
-            padding: 15px;
-            background: #f8fafc;
-        }
-        
-        .table tbody td {
-            padding: 15px;
-            vertical-align: middle;
-            border-bottom: 1px solid #e2e8f0;
-        }
-        
-        .status-badge {
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        
-        .status-confirmed {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        
-        .status-completed {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        
-        .status-cancelled {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
-        /* Quick Actions */
-        .quick-actions {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        
-        .action-btn {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 20px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            color: #475569;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .action-btn:hover {
-            background: #4361ee;
-            color: white;
-            border-color: #4361ee;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
-        }
-        
-        .action-btn i {
-            font-size: 1.2rem;
-        }
-        
-        /* Court Status Cards */
-        .court-status-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 5px solid;
-            transition: all 0.3s ease;
-        }
-        
-        .court-status-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .court-status-available {
-            border-left-color: #10b981;
-        }
-        
-        .court-status-occupied {
-            border-left-color: #ef4444;
-        }
-        
-        .court-status-maintenance {
-            border-left-color: #f59e0b;
-        }
-        
-        .court-progress {
-            height: 6px;
-            background: #e2e8f0;
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        
-        .court-progress-bar {
-            height: 100%;
-            border-radius: 3px;
-        }
-        
-        /* Calendar */
-        .calendar-card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            border: none;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-            height: 100%;
-        }
-        
-        .calendar-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .calendar-days {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            margin-bottom: 10px;
-        }
-        
-        .calendar-day {
-            text-align: center;
-            padding: 10px;
-            font-weight: 600;
-            color: #64748b;
-        }
-        
-        .calendar-dates {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-        }
-        
-        .calendar-date {
-            text-align: center;
-            padding: 12px;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .calendar-date:hover {
-            background: #f1f5f9;
-        }
-        
-        .calendar-date.today {
-            background: #4361ee;
-            color: white;
-        }
-        
-        .calendar-date.has-booking {
-            background: #4cc9f0;
-            color: white;
-        }
-        
-        .calendar-date.other-month {
-            color: #cbd5e1;
-        }
-        
-        /* Mobile Responsive */
+
+        /* Responsive */
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
             }
-            
+
             .sidebar.active {
                 transform: translateX(0);
             }
-            
-            .main-content, .navbar-admin {
+
+            .main-content,
+            .navbar-admin {
                 margin-left: 0;
             }
-            
-            .action-btn {
-                min-width: 100%;
+
+            .search-group {
+                display: none;
             }
-        }
-        
-        /* Dark Mode Support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #1e293b;
-            }
-            
-            .stats-card,
-            .chart-card,
-            .data-table,
-            .calendar-card,
-            .court-status-card {
-                background: #334155;
-                color: #e2e8f0;
-            }
-            
-            .navbar-admin {
-                background: #334155;
-                border-bottom-color: #475569;
-            }
-            
-            .search-box input {
-                background: #475569;
-                border-color: #64748b;
-                color: #e2e8f0;
-            }
-            
-            .search-icon {
-                color: #94a3b8;
-            }
-            
-            .table {
-                color: #e2e8f0;
-            }
-            
-            .table thead th {
-                background: #475569;
-                border-bottom-color: #64748b;
-            }
-            
-            .table tbody td {
-                border-bottom-color: #475569;
-            }
-            
-            .action-btn {
-                background: #475569;
-                border-color: #64748b;
-                color: #e2e8f0;
-            }
+
+            /* Sembunyikan search di mobile biar rapi */
         }
     </style>
-    
+
     @stack('styles')
 </head>
+
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar" id="sidebar">
+
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <div class="sidebar-brand">
-                <div class="sidebar-brand-icon">
-                    <i class="bi bi-shield-lock"></i>
+            <a href="{{ url('/') }}" class="sidebar-brand">
+                <div class="brand-icon-box">
+                    <i class="bi bi-trophy-fill"></i>
                 </div>
-                <div>
-                    <h4 class="mb-0">ArenaAdmin</h4>
-                    <small class="opacity-75">Sports Booking System</small>
+                <div class="brand-text">
+                    <h4>Meraket</h4>
+                    <small style="color: #94a3b8; font-weight: 500;">Admin Dashboard</small>
                 </div>
-            </div>
+            </a>
         </div>
-        
+
         <div class="sidebar-menu">
-            <ul class="nav flex-column">
+            <div class="nav-title">Menu Utama</div>
+            <ul class="nav flex-column gap-1">
                 <li class="nav-item">
-                    <a class="nav-link active" href="/admin">
-                        <i class="bi bi-speedometer2"></i>
+                    <a class="nav-link {{ Request::is('admin') ? 'active' : '' }}" href="{{ url('/admin') }}">
+                        <i class="bi bi-grid-fill"></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/bookings">
-                        <i class="bi bi-calendar-check"></i>
+                    <a class="nav-link {{ Request::is('admin/bookings*') ? 'active' : '' }}"
+                        href="{{ url('/admin/bookings') }}">
+                        <i class="bi bi-calendar2-check-fill"></i>
                         <span>Bookings</span>
-                        <span class="badge-notification">12</span>
+                        <span class="badge bg-danger rounded-pill ms-auto" style="font-size: 10px;">New</span>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/courts">
-                        <i class="bi bi-house-door"></i>
-                        <span>Courts</span>
+                    <a class="nav-link {{ Request::is('admin/venue*') ? 'active' : '' }}"
+                        href="{{ url('/admin/venue') }}">
+                        <i class="bi bi-geo-alt-fill"></i>
+                        <span>Venues</span>
                     </a>
                 </li>
-                
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/monitoring">
-                        <i class="bi bi-tv"></i>
-                        <span>Monitoring</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/transactions">
-                        <i class="bi bi-cash-stack"></i>
+                    <a class="nav-link {{ Request::is('admin/transactions*') ? 'active' : '' }}"
+                        href="{{ url('/admin/transactions') }}">
+                        <i class="bi bi-credit-card-fill"></i>
                         <span>Transactions</span>
                     </a>
                 </li>
-                
+
+                <div class="nav-title mt-4">Lainnya</div>
+
                 <li class="nav-item">
-                    <a class="nav-link" href="/admin/users">
-                        <i class="bi bi-people"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/reports">
-                        <i class="bi bi-graph-up"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-                
-                <hr class="opacity-25 mx-3 my-4">
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="/admin/settings">
-                        <i class="bi bi-gear"></i>
+                    <a class="nav-link {{ Request::is('admin/settings*') ? 'active' : '' }}"
+                        href="{{ url('/admin/settings') }}">
+                        <i class="bi bi-gear-fill"></i>
                         <span>Settings</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link" href="/">
-                        <i class="bi bi-arrow-left"></i>
-                        <span>Back to Site</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="/admin/logout">
-                        <i class="bi bi-box-arrow-right"></i>
-                        <span>Logout</span>
                     </a>
                 </li>
             </ul>
         </div>
-    </div>
 
-    <!-- Navbar -->
-    <nav class="navbar-admin" id="navbarAdmin">
-        <div class="container-fluid">
-            <div class="d-flex justify-content-between align-items-center w-100">
-                <!-- Left: Toggle Button & Search -->
-                <div class="d-flex align-items-center gap-4">
-                    <button class="btn btn-outline-primary d-lg-none" id="sidebarToggle">
-                        <i class="bi bi-list"></i>
-                    </button>
-                    
-                    <div class="search-box d-none d-lg-block">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" class="form-control" placeholder="Search bookings, users, courts...">
-                    </div>
-                </div>
-                
-                <!-- Right: Notifications & User -->
-                <div class="d-flex align-items-center gap-3">
-                    <!-- Notifications -->
-                    <div class="dropdown">
-                        <button class="btn btn-link text-dark position-relative" type="button" data-bs-toggle="dropdown">
-                            <i class="bi bi-bell fs-5"></i>
-                            <span class="notification-badge">3</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" style="width: 320px;">
-                            <li class="dropdown-header">
-                                <h6 class="mb-0">Notifications</h6>
-                                <small>3 new notifications</small>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center py-3" href="#">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-primary text-white p-2">
-                                            <i class="bi bi-calendar-check"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="fw-semibold">New Booking Request</div>
-                                        <small class="text-muted">Court #12 • 2 mins ago</small>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center py-3" href="#">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-success text-white p-2">
-                                            <i class="bi bi-credit-card"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="fw-semibold">Payment Received</div>
-                                        <small class="text-muted">Rp 450,000 • 1 hour ago</small>
-                                    </div>
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center py-3" href="#">
-                                    <div class="flex-shrink-0">
-                                        <div class="rounded-circle bg-warning text-white p-2">
-                                            <i class="bi bi-exclamation-triangle"></i>
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <div class="fw-semibold">Maintenance Alert</div>
-                                        <small class="text-muted">Court #5 • 3 hours ago</small>
-                                    </div>
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-center text-primary" href="#">
-                                    View all notifications
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <!-- User Dropdown -->
-                    <div class="dropdown">
-                        <button class="user-dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            <div class="user-avatar">
-                                A
+        <div class="p-3 mt-auto border-top border-secondary border-opacity-10">
+            <a href="{{ url('/admin/logout') }}"
+                class="nav-link text-danger hover-danger justify-content-center bg-white bg-opacity-10 rounded-3">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <nav class="navbar-admin d-flex justify-content-between align-items-center" id="navbarAdmin">
+
+        <div class="d-flex align-items-center gap-4">
+            <button class="btn border-0 d-lg-none p-0" id="sidebarToggle">
+                <i class="bi bi-list fs-2 text-dark"></i>
+            </button>
+
+            <div class="search-group d-none d-md-block">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" placeholder="Cari booking, nama, atau ID..." aria-label="Search">
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3">
+
+            <a href="{{ url('/') }}" class="btn-icon-hover" data-bs-toggle="tooltip" title="Lihat Website">
+                <i class="bi bi-globe2 fs-5"></i>
+            </a>
+
+            <div class="dropdown">
+                <button class="btn-icon-hover border-0 position-relative" data-bs-toggle="dropdown">
+                    <i class="bi bi-bell fs-5"></i>
+                    <div class="status-dot"></div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-3 rounded-4 mt-2" style="width: 300px;">
+                    <li>
+                        <h6 class="dropdown-header text-uppercase fw-bold text-muted small">Notifikasi</h6>
+                    </li>
+                    <li>
+                        <a class="dropdown-item p-2 rounded-3 mb-1 d-flex align-items-start gap-2" href="#">
+                            <div class="bg-primary bg-opacity-10 text-primary rounded p-1"><i class="bi bi-receipt"></i>
                             </div>
-                            <div class="text-start d-none d-lg-block">
-                                <div class="fw-semibold">Admin User</div>
-                                <small class="text-muted">Administrator</small>
+                            <div>
+                                <div class="fw-bold small">Booking Baru #ORD-99</div>
+                                <div class="text-muted" style="font-size: 11px;">2 menit yang lalu</div>
                             </div>
-                            <i class="bi bi-chevron-down"></i>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow border-0">
-                            <li>
-                                <a class="dropdown-item" href="/admin/profile">
-                                    <i class="bi bi-person me-2"></i>Profile
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="/admin/settings">
-                                    <i class="bi bi-gear me-2"></i>Settings
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <a class="dropdown-item text-danger" href="/admin/logout">
-                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                </a>
-                            </li>
-                        </ul>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item p-2 rounded-3 d-flex align-items-start gap-2" href="#">
+                            <div class="bg-success bg-opacity-10 text-success rounded p-1"><i class="bi bi-cash"></i>
+                            </div>
+                            <div>
+                                <div class="fw-bold small">Pembayaran Diterima</div>
+                                <div class="text-muted" style="font-size: 11px;">10 menit yang lalu</div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div style="width: 1px; height: 24px; background: #e2e8f0;"></div>
+
+            <div class="dropdown">
+                <div class="user-profile-btn d-flex align-items-center gap-2" data-bs-toggle="dropdown">
+                    <div class="avatar-circle">A</div>
+                    <div class="d-none d-sm-block text-start me-1">
+                        <div class="fw-bold text-dark" style="font-size: 0.85rem; line-height: 1.2;">Admin</div>
+                        <div class="text-muted" style="font-size: 0.7rem;">Superuser</div>
                     </div>
+                    <i class="bi bi-chevron-down text-muted" style="font-size: 0.8rem;"></i>
                 </div>
+                <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg p-2 rounded-4 mt-2">
+                    <li><a class="dropdown-item rounded-3" href="#"><i class="bi bi-person me-2"></i>
+                            Profile</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item rounded-3 text-danger" href="#"><i
+                                class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- main content -->
     <main class="main-content" id="mainContent">
         @yield('content')
     </main>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0"></script>
-    
+
     <script>
-        // Sidebar 
-        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('active');
+        // Init Tooltip Bootstrap
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+        // Sidebar Toggle Logic
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+
+        sidebarToggle?.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
         });
-        
-        // Close sidebar when clicking outside on mobile
-        document.addEventListener('click', function(event) {
-            const sidebar = document.getElementById('sidebar');
-            const toggleBtn = document.getElementById('sidebarToggle');
-            const isClickInsideSidebar = sidebar.contains(event.target);
-            const isClickOnToggle = toggleBtn?.contains(event.target);
-            
-            if (window.innerWidth < 992 && !isClickInsideSidebar && !isClickOnToggle) {
-                sidebar.classList.remove('active');
+
+        // Close Sidebar on Mobile click outside
+        document.addEventListener('click', (e) => {
+            if (window.innerWidth < 992) {
+                if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+                    sidebar.classList.remove('active');
+                }
             }
         });
-        
-        // Update current date and time
-        function updateDateTime() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            };
-            const dateTimeStr = now.toLocaleDateString('id-ID', options);
-            
-            const dateTimeElement = document.getElementById('currentDateTime');
-            if (dateTimeElement) {
-                dateTimeElement.textContent = dateTimeStr;
-            }
-        }
-        
-        updateDateTime();
-        setInterval(updateDateTime, 60000);
     </script>
-    
+
     @stack('scripts')
 </body>
+
 </html>

@@ -1,862 +1,506 @@
 @extends('layouts.admin')
 
-@section('title', 'Dashboard Admin')
+@section('title', 'Executive Dashboard')
 
 @push('styles')
-<style>
-    /* Custom Dashboard Styles */
-    .welcome-card {
-        background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-        border-radius: 20px;
-        color: white;
-        padding: 35px;
-        position: relative;
-        overflow: hidden;
-    }
-    
-    .welcome-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -20%;
-        width: 200px;
-        height: 200px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-    }
-    
-    .welcome-card::after {
-        content: '';
-        position: absolute;
-        bottom: -30%;
-        right: 10%;
-        width: 150px;
-        height: 150px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 50%;
-    }
-    
-    .performance-indicator {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 8px 15px;
-        border-radius: 10px;
-        backdrop-filter: blur(10px);
-    }
-    
-    .chart-container {
-        position: relative;
-        height: 300px;
-    }
-    
-    .live-indicator {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 0.85rem;
-    }
-    
-    .live-dot {
-        width: 8px;
-        height: 8px;
-        background: #ef4444;
-        border-radius: 50%;
-        animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.5; }
-        100% { opacity: 1; }
-    }
-    
-    .quick-stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        margin-top: 20px;
-    }
-    
-    .quick-stat-item {
-        background: white;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-    
-    .quick-stat-item:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .quick-stat-value {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #4361ee;
-        margin-bottom: 5px;
-    }
-    
-    .quick-stat-label {
-        font-size: 0.85rem;
-        color: #64748b;
-    }
-    
-    .booking-calendar {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 10px;
-        margin-top: 20px;
-    }
-    
-    .calendar-day-cell {
-        aspect-ratio: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        padding: 5px;
-    }
-    
-    .calendar-day-cell:hover {
-        background: #f1f5f9;
-    }
-    
-    .calendar-day-cell.today {
-        background: #4361ee;
-        color: white;
-    }
-    
-    .calendar-day-cell.has-bookings {
-        background: #4cc9f0;
-        color: white;
-        position: relative;
-    }
-    
-    .booking-count {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        background: white;
-        color: #4361ee;
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        font-size: 0.7rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .activity-timeline {
-        position: relative;
-        padding-left: 30px;
-    }
-    
-    .activity-timeline::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 2px;
-        background: #e2e8f0;
-    }
-    
-    .activity-item {
-        position: relative;
-        padding: 15px 0;
-        padding-left: 30px;
-    }
-    
-    .activity-item::before {
-        content: '';
-        position: absolute;
-        left: -30px;
-        top: 20px;
-        width: 12px;
-        height: 12px;
-        border-radius: 50%;
-        background: #4361ee;
-        border: 3px solid white;
-    }
-    
-    .activity-time {
-        font-size: 0.85rem;
-        color: #64748b;
-        margin-bottom: 5px;
-    }
-    
-    .activity-content {
-        font-weight: 500;
-    }
-    
-    .court-availability {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .availability-bar {
-        height: 8px;
-        background: #e2e8f0;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-    
-    .availability-fill {
-        height: 100%;
-        border-radius: 4px;
-        transition: width 1s ease;
-    }
-    
-    .availability-fill.available {
-        background: #10b981;
-    }
-    
-    .availability-fill.occupied {
-        background: #ef4444;
-    }
-    
-    .availability-fill.maintenance {
-        background: #f59e0b;
-    }
-    
-    /* Loading Animation */
-    .loading-spinner {
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        border: 3px solid #f3f3f3;
-        border-top: 3px solid #4361ee;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-    }
-    
-    /* Responsive Adjustments */
-    @media (max-width: 768px) {
+    <style>
+        :root {
+            --primary-orange: #FF6700;
+            --secondary-orange: #ff8533;
+            --text-dark: #1e293b;
+            --card-border: #f1f5f9;
+        }
+
+        /* 1. HERO SECTION (Updated) */
         .welcome-card {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border-radius: 24px;
+            padding: 40px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.3);
+        }
+
+        .welcome-card::after {
+            content: '';
+            position: absolute;
+            right: -50px;
+            bottom: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 103, 0, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+        }
+
+        /* 2. ANALYTICS CARDS (Mixed Chart Section) */
+        .chart-card {
+            background: white;
+            border-radius: 24px;
             padding: 25px;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.03);
+            height: 100%;
+            transition: transform 0.3s ease;
         }
-        
-        .quick-stats {
-            grid-template-columns: repeat(2, 1fr);
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
-        
-        .booking-calendar {
-            gap: 5px;
+
+        .chart-title h5 {
+            font-weight: 700;
+            color: var(--text-dark);
+            margin: 0;
+            font-size: 1.1rem;
         }
-        
-        .calendar-day-cell {
-            font-size: 0.85rem;
+
+        .chart-title span {
+            font-size: 0.8rem;
+            color: #64748b;
         }
-    }
-</style>
+
+        /* 3. MINI STAT CARDS (Clean Style) */
+        .mini-stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.3s;
+        }
+
+        .mini-stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #FF6700;
+            box-shadow: 0 10px 30px rgba(255, 103, 0, 0.1);
+        }
+
+        .icon-box {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        /* 4. RECENT BOOKINGS LIST (Modern List) */
+        .booking-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .booking-item:last-child {
+            border-bottom: none;
+        }
+
+        .booking-time {
+            min-width: 80px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .booking-info h6 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .booking-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+
+        /* Animations */
+        .animate-up {
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 @endpush
 
 @section('content')
-<div class="container-fluid">
-    <!-- Welcome Header -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="welcome-card position-relative overflow-hidden">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h1 class="display-6 fw-bold mb-3">Welcome back, <span class="text-warning">Admin!</span> 👋</h1>
-                        <p class="lead opacity-90 mb-4">Here's what's happening with your sports arena today.</p>
-                        
-                        <div class="performance-indicator d-inline-flex align-items-center">
-                            <span class="d-flex align-items-center">
-                                <i class="bi bi-graph-up-arrow text-success me-2"></i>
-                                <span class="fw-semibold">Revenue up 24%</span>
-                            </span>
-                            <span class="opacity-75">this week</span>
+    <div class="container-fluid p-0">
+
+        <div class="row mb-4 animate-up">
+            <div class="col-12">
+                <div class="welcome-card">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h2 class="fw-bold mb-2">Dashboard Operasional</h2>
+                            <p class="text-white-50 mb-0">
+                                Ringkasan aktivitas hari ini, <span id="currentDate" class="text-white fw-bold"></span>.
+                            </p>
                         </div>
-                    </div>
-                    <div class="col-md-4 text-end d-none d-md-block">
-                        <div class="position-relative z-2">
-                            <div class="mb-3">
-                                <div class="fs-6 opacity-75">Current Time</div>
-                                <div class="h3 fw-bold" id="currentDateTime">Loading...</div>
-                            </div>
-                            <button class="btn btn-light rounded-pill px-4">
-                                <i class="bi bi-download me-2"></i>Export Report
+                        <div class="col-lg-4 text-end d-none d-lg-block">
+                            <button class="btn btn-light fw-bold rounded-pill px-4 py-2 shadow-sm text-dark">
+                                <i class="bi bi-file-earmark-text me-2"></i> Download Laporan
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Quick Stats -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="quick-stats">
-                <div class="quick-stat-item">
-                    <div class="quick-stat-value">24</div>
-                    <div class="quick-stat-label">Active Courts</div>
-                </div>
-                <div class="quick-stat-item">
-                    <div class="quick-stat-value">156</div>
-                    <div class="quick-stat-label">Today's Bookings</div>
-                </div>
-                <div class="quick-stat-item">
-                    <div class="quick-stat-value">Rp 12.5M</div>
-                    <div class="quick-stat-label">Daily Revenue</div>
-                </div>
-                <div class="quick-stat-item">
-                    <div class="quick-stat-value">98%</div>
-                    <div class="quick-stat-label">Occupancy Rate</div>
-                </div>
-                <div class="quick-stat-item">
-                    <div class="quick-stat-value">18</div>
-                    <div class="quick-stat-label">Pending Approvals</div>
-                </div>
-                <div class="quick-stat-item">
-                    <div class="quick-stat-value">4.8★</div>
-                    <div class="quick-stat-label">Avg. Rating</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Dashboard Grid -->
-    <div class="row g-4">
-        <!-- Left Column: Charts & Stats -->
-        <div class="col-lg-8">
-            <!-- Revenue Chart -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div>
-                                <h5 class="fw-bold mb-1">Revenue Overview</h5>
-                                <p class="text-muted mb-0">Last 30 days performance</p>
-                            </div>
-                            <div class="live-indicator">
-                                <span class="live-dot"></span>
-                                <span class="text-danger fw-semibold">LIVE</span>
-                            </div>
-                        </div>
-                        <div class="chart-container" id="revenueChart"></div>
+        <div class="row g-4 mb-4 animate-up delay-100">
+            <div class="col-md-3">
+                <div class="mini-stat-card">
+                    <div class="icon-box bg-orange-100 text-orange-600" style="background: #fff7ed; color: #ea580c;">
+                        <i class="bi bi-wallet2"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">Rp 12.5M</h4>
+                        <small class="text-muted">Pendapatan Hari Ini</small>
                     </div>
                 </div>
             </div>
-
-            <!-- Court Availability -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <div>
-                                <h5 class="fw-bold mb-1">Court Availability</h5>
-                                <p class="text-muted mb-0">Real-time status</p>
-                            </div>
-                            <select class="form-select form-select-sm w-auto">
-                                <option>All Courts</option>
-                                <option>Futsal</option>
-                                <option>Badminton</option>
-                                <option>Basketball</option>
-                            </select>
-                        </div>
-                        <div class="court-availability">
-                            @foreach([1,2,3,4,5,6,7,8] as $court)
-                            <div>
-                                <div class="d-flex justify-content-between mb-1">
-                                    <span class="fw-semibold">Court {{$court}} - {{['Futsal','Badminton','Basketball','Tennis'][$court%4]}}</span>
-                                    <span class="text-muted">{{rand(70, 95)}}% available</span>
-                                </div>
-                                <div class="availability-bar">
-                                    <div class="availability-fill {{['available','occupied','maintenance'][$court%3]}}" 
-                                         style="width: {{rand(70, 95)}}%"></div>
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Bookings Table -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="data-table">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <div>
-                                <h5 class="fw-bold mb-1">Recent Bookings</h5>
-                                <p class="text-muted mb-0">Latest booking requests</p>
-                            </div>
-                            <a href="/admin/bookings" class="btn btn-sm btn-primary">
-                                View All <i class="bi bi-arrow-right ms-1"></i>
-                            </a>
-                        </div>
-                        
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Customer</th>
-                                        <th>Court</th>
-                                        <th>Date & Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @for($i = 1; $i <= 5; $i++)
-                                    <tr>
-                                        <td class="fw-semibold">#B{{str_pad($i, 4, '0', STR_PAD_LEFT)}}</td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" 
-                                                     style="width: 32px; height: 32px; font-size: 0.85rem; margin-right: 10px;">
-                                                    {{substr(['John','Sarah','Mike','Lisa','David'][$i-1], 0, 1)}}
-                                                </div>
-                                                <div>
-                                                    <div class="fw-semibold">{{['John Doe','Sarah Smith','Mike Johnson','Lisa Brown','David Wilson'][$i-1]}}</div>
-                                                    <small class="text-muted">{{['john@email.com','sarah@email.com','mike@email.com','lisa@email.com','david@email.com'][$i-1]}}</small>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="fw-semibold">Court {{$i}}</div>
-                                            <small class="text-muted">{{['Futsal','Badminton','Basketball','Tennis','Volleyball'][$i-1]}}</small>
-                                        </td>
-                                        <td>
-                                            <div class="fw-semibold">{{date('d M')}}</div>
-                                            <small class="text-muted">{{['14:00-16:00','10:00-12:00','18:00-20:00','08:00-10:00','16:00-18:00'][$i-1]}}</small>
-                                        </td>
-                                        <td class="fw-bold">Rp {{number_format([440000, 330000, 550000, 220000, 385000][$i-1], 0, ',', '.')}}</td>
-                                        <td>
-                                            @php
-                                                $statuses = ['pending', 'confirmed', 'completed', 'pending', 'cancelled'];
-                                                $statusColors = ['status-pending', 'status-confirmed', 'status-completed', 'status-pending', 'status-cancelled'];
-                                            @endphp
-                                            <span class="status-badge {{$statusColors[$i-1]}}">
-                                                {{ucfirst($statuses[$i-1])}}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <button class="btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown">
-                                                    <i class="bi bi-three-dots"></i>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-eye me-2"></i>View</a></li>
-                                                    <li><a class="dropdown-item" href="#"><i class="bi bi-check-circle me-2"></i>Approve</a></li>
-                                                    <li><a class="dropdown-item text-danger" href="#"><i class="bi bi-x-circle me-2"></i>Reject</a></li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    @endfor
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Right Column: Sidebar Content -->
-        <div class="col-lg-4">
-            <!-- Quick Actions -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="chart-card">
-                        <h5 class="fw-bold mb-4">Quick Actions</h5>
-                        <div class="quick-actions">
-                            <a href="/admin/bookings/create" class="action-btn">
-                                <i class="bi bi-plus-circle"></i>
-                                <span>New Booking</span>
-                            </a>
-                            <a href="/admin/courts/create" class="action-btn">
-                                <i class="bi bi-house-add"></i>
-                                <span>Add Court</span>
-                            </a>
-                            <a href="/admin/reports" class="action-btn">
-                                <i class="bi bi-graph-up"></i>
-                                <span>View Reports</span>
-                            </a>
-                            <a href="/admin/monitoring" class="action-btn">
-                                <i class="bi bi-tv"></i>
-                                <span>Live Monitoring</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Booking Calendar -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="calendar-card">
-                        <div class="calendar-header">
-                            <div>
-                                <h5 class="fw-bold mb-1">Booking Calendar</h5>
-                                <p class="text-muted mb-0">{{date('F Y')}}</p>
-                            </div>
-                            <div class="btn-group">
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-chevron-left"></i>
-                                </button>
-                                <button class="btn btn-sm btn-outline-secondary">
-                                    <i class="bi bi-chevron-right"></i>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div class="booking-calendar">
-                            @php
-                                $days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-                                $today = date('j');
-                            @endphp
-                            
-                            <!-- Day headers -->
-                            @foreach($days as $day)
-                            <div class="calendar-day text-center fw-semibold text-muted">{{$day}}</div>
-                            @endforeach
-                            
-                            <!-- Calendar dates -->
-                            @for($day = 1; $day <= 31; $day++)
-                            <div class="calendar-day-cell {{$day == $today ? 'today' : ''}} {{rand(0, 1) ? 'has-bookings' : ''}}">
-                                <span>{{$day}}</span>
-                                @if(rand(0, 1))
-                                <span class="booking-count">{{rand(1, 5)}}</span>
-                                @endif
-                            </div>
-                            @endfor
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="chart-card">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="fw-bold mb-0">Recent Activity</h5>
-                            <span class="badge bg-primary rounded-pill">New</span>
-                        </div>
-                        
-                        <div class="activity-timeline">
-                            @php
-                                $activities = [
-                                    ['time' => 'Just now', 'icon' => 'bi-calendar-check', 'color' => 'primary', 'text' => 'New booking from John Doe'],
-                                    ['time' => '5 mins ago', 'icon' => 'bi-credit-card', 'color' => 'success', 'text' => 'Payment received Rp 450,000'],
-                                    ['time' => '1 hour ago', 'icon' => 'bi-star', 'color' => 'warning', 'text' => 'New 5-star review received'],
-                                    ['time' => '2 hours ago', 'icon' => 'bi-exclamation-triangle', 'color' => 'danger', 'text' => 'Maintenance scheduled for Court #5'],
-                                    ['time' => '3 hours ago', 'icon' => 'bi-person-plus', 'color' => 'info', 'text' => 'New user registration'],
-                                ];
-                            @endphp
-                            
-                            @foreach($activities as $activity)
-                            <div class="activity-item">
-                                <div class="activity-time">
-                                    <i class="bi bi-clock me-1"></i>{{$activity['time']}}
-                                </div>
-                                <div class="activity-content">
-                                    <i class="bi {{$activity['icon']}} me-2 text-{{$activity['color']}}"></i>
-                                    {{$activity['text']}}
-                                </div>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Performance Stats -->
-    <div class="row mt-4">
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="stats-card">
-                <div class="d-flex align-items-center">
-                    <div class="stats-icon stats-icon-primary">
-                        <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ms-3">
-                        <div class="stats-number">1,248</div>
-                        <div class="text-muted">Active Users</div>
-                        <small class="trend-up">+12.5% this month</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="stats-card">
-                <div class="d-flex align-items-center">
-                    <div class="stats-icon stats-icon-success">
+            <div class="col-md-3">
+                <div class="mini-stat-card">
+                    <div class="icon-box bg-blue-100 text-blue-600" style="background: #eff6ff; color: #2563eb;">
                         <i class="bi bi-calendar-check"></i>
                     </div>
-                    <div class="ms-3">
-                        <div class="stats-number">3,456</div>
-                        <div class="text-muted">Monthly Bookings</div>
-                        <small class="trend-up">+8.2% from last month</small>
+                    <div>
+                        <h4 class="fw-bold mb-0">86</h4>
+                        <small class="text-muted">Total Booking</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mini-stat-card">
+                    <div class="icon-box bg-green-100 text-green-600" style="background: #f0fdf4; color: #16a34a;">
+                        <i class="bi bi-graph-up-arrow"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">92%</h4>
+                        <small class="text-muted">Tingkat Okupansi</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="mini-stat-card">
+                    <div class="icon-box bg-purple-100 text-purple-600" style="background: #faf5ff; color: #9333ea;">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div>
+                        <h4 class="fw-bold mb-0">12</h4>
+                        <small class="text-muted">User Baru</small>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="stats-card">
-                <div class="d-flex align-items-center">
-                    <div class="stats-icon stats-icon-warning">
-                        <i class="bi bi-cash-stack"></i>
+
+        <div class="row g-4 mb-4 animate-up delay-200">
+
+            <div class="col-lg-8">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <h5>Analisis Okupansi & Trafik</h5>
+                            <span>Perbandingan jumlah booking vs pendapatan mingguan</span>
+                        </div>
+                        <select class="form-select form-select-sm w-auto border-0 bg-light fw-bold text-secondary">
+                            <option>7 Hari Terakhir</option>
+                            <option>Bulan Ini</option>
+                        </select>
                     </div>
-                    <div class="ms-3">
-                        <div class="stats-number">Rp 245M</div>
-                        <div class="text-muted">Monthly Revenue</div>
-                        <small class="trend-up">+24.7% growth</small>
+                    <div id="trafficChart" style="min-height: 350px;"></div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <h5>Kategori Populer</h5>
+                            <span>Distribusi booking berdasarkan tipe</span>
+                        </div>
+                        <button class="btn btn-sm btn-light border-0"><i class="bi bi-three-dots"></i></button>
+                    </div>
+                    <div id="sportsChart" style="min-height: 250px; display: flex; justify-content: center;"></div>
+
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <small class="fw-bold text-muted">DETAIL PERSENTASE</small>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded hover-bg-light">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge rounded-circle p-1" style="background: #FF6700;"> </span>
+                                <span class="small fw-semibold">Badminton</span>
+                            </div>
+                            <span class="small fw-bold">45%</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded hover-bg-light">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge rounded-circle p-1" style="background: #1e293b;"> </span>
+                                <span class="small fw-semibold">Futsal</span>
+                            </div>
+                            <span class="small fw-bold">30%</span>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between p-2 rounded hover-bg-light">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="badge rounded-circle p-1" style="background: #f59e0b;"> </span>
+                                <span class="small fw-semibold">Tennis/Padel</span>
+                            </div>
+                            <span class="small fw-bold">25%</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="stats-card">
-                <div class="d-flex align-items-center">
-                    <div class="stats-icon stats-icon-info">
-                        <i class="bi bi-star"></i>
+
+        <div class="row g-4 animate-up delay-300">
+            <div class="col-lg-6">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <h5>Booking Terbaru</h5>
+                            <span>Transaksi yang baru masuk</span>
+                        </div>
+                        <a href="/admin/bookings" class="text-decoration-none small fw-bold text-orange-600"
+                            style="color: #FF6700;">Lihat Semua</a>
                     </div>
-                    <div class="ms-3">
-                        <div class="stats-number">4.8</div>
-                        <div class="text-muted">Average Rating</div>
-                        <small class="trend-up">+0.3 this month</small>
+
+                    <div class="booking-list">
+                        @foreach ([1, 2, 3, 4] as $i)
+                            <div class="booking-item">
+                                <div class="booking-time">
+                                    <span class="d-block text-dark">{{ 10 + $i }}:00</span>
+                                    <span class="badge bg-light text-secondary rounded-pill"
+                                        style="font-size: 10px;">AM</span>
+                                </div>
+                                <div class="booking-info flex-grow-1">
+                                    <h6>{{ ['Court A - Badminton', 'Court C - Futsal', 'Court B - Tennis', 'Court A - Padel'][$i - 1] }}
+                                    </h6>
+                                    <p>Oleh: {{ ['Budi Santoso', 'Siti Aminah', 'Rahmat Hidayat', 'Dewi Lestari'][$i - 1] }}
+                                    </p>
+                                </div>
+                                <div class="booking-status">
+                                    @if ($i == 1)
+                                        <span
+                                            class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Pending</span>
+                                    @elseif($i == 2)
+                                        <span
+                                            class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Paid</span>
+                                    @else
+                                        <span
+                                            class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">Booked</span>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="chart-card bg-dark text-white" style="background: #111827; border: none;">
+                    <div class="chart-header">
+                        <div class="chart-title">
+                            <h5 class="text-white">Status Lapangan (Live)</h5>
+                            <span class="text-white-50"><span class="badge bg-danger rounded-circle p-1 me-1"> </span>
+                                Real-time monitoring</span>
+                        </div>
+                    </div>
+
+                    <div class="row g-3">
+                        @foreach (['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as $court)
+                            <div class="col-4">
+                                <div class="p-3 rounded-3 text-center transition-transform hover-scale"
+                                    style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                                    <small class="d-block text-white-50 mb-2">Court {{ $court }}</small>
+                                    @if ($loop->index % 3 == 0)
+                                        <i class="bi bi-check-circle-fill text-success fs-3"></i>
+                                        <div class="small text-success mt-1">Kosong</div>
+                                    @elseif($loop->index % 3 == 1)
+                                        <i class="bi bi-x-circle-fill text-danger fs-3"></i>
+                                        <div class="small text-danger mt-1">Dipakai</div>
+                                    @else
+                                        <i class="bi bi-clock-fill text-warning fs-3"></i>
+                                        <div class="small text-warning mt-1">Booked</div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 text-center">
+                        <a href="/admin/monitoring" class="btn btn-outline-light btn-sm rounded-pill px-4">Buka Monitor
+                            Penuh</a>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
-</div>
 @endsection
 
 @push('scripts')
-<script>
-    // Initialize ApexCharts
-    document.addEventListener('DOMContentLoaded', function() {
-        // Revenue Chart
-        const revenueChartOptions = {
-            series: [{
-                name: 'Revenue',
-                data: [4500000, 5200000, 3800000, 4100000, 5600000, 6200000, 7500000, 
-                       8200000, 7800000, 9100000, 8900000, 9500000, 10200000, 11500000, 
-                       10800000, 12500000, 11800000, 13200000, 14500000, 13800000, 
-                       15200000, 16500000, 15800000, 17200000, 18500000, 17800000, 
-                       19200000, 20500000, 19800000, 21500000]
-            }],
-            chart: {
-                type: 'area',
-                height: '100%',
-                toolbar: {
-                    show: false
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Set Tanggal
+            const dateOptions = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID',
+            dateOptions);
+
+            // 2. MIXED CHART (Traffic & Occupancy)
+            var trafficOptions = {
+                series: [{
+                    name: 'Total Booking',
+                    type: 'column',
+                    data: [44, 55, 57, 56, 61, 58, 63]
+                }, {
+                    name: 'Pendapatan (Juta)',
+                    type: 'line',
+                    data: [76, 85, 101, 98, 87, 105, 91]
+                }],
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    toolbar: {
+                        show: false
+                    },
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
                 },
-                zoom: {
+                stroke: {
+                    width: [0, 4],
+                    curve: 'smooth'
+                },
+                plotOptions: {
+                    bar: {
+                        columnWidth: '40%',
+                        borderRadius: 8
+                    }
+                },
+                dataLabels: {
                     enabled: false
                 },
-                animations: {
-                    enabled: true,
-                    speed: 800
-                }
-            },
-            colors: ['#4361ee'],
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                curve: 'smooth',
-                width: 3
-            },
-            fill: {
-                type: 'gradient',
-                gradient: {
-                    shadeIntensity: 1,
-                    opacityFrom: 0.7,
-                    opacityTo: 0.3,
-                    stops: [0, 90, 100]
-                }
-            },
-            grid: {
-                borderColor: '#e2e8f0',
-                strokeDashArray: 3,
+                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
+                colors: ['#FF6700', '#1e293b'], // Orange untuk Bar, Navy untuk Line
                 xaxis: {
-                    lines: {
-                        show: true
-                    }
-                },
-                yaxis: {
-                    lines: {
-                        show: true
-                    }
-                }
-            },
-            xaxis: {
-                type: 'datetime',
-                categories: Array.from({length: 30}, (_, i) => {
-                    const date = new Date();
-                    date.setDate(date.getDate() - (29 - i));
-                    return date.toISOString().split('T')[0];
-                }),
-                labels: {
-                    format: 'dd MMM',
-                    style: {
-                        colors: '#64748b',
-                        fontSize: '12px'
-                    }
-                },
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false
-                }
-            },
-            yaxis: {
-                labels: {
-                    formatter: function(value) {
-                        return 'Rp ' + (value / 1000000).toFixed(1) + 'M';
+                    axisBorder: {
+                        show: false
                     },
-                    style: {
-                        colors: '#64748b',
-                        fontSize: '12px'
+                    axisTicks: {
+                        show: false
                     }
-                }
-            },
-            tooltip: {
-                x: {
-                    format: 'dd MMM yyyy'
                 },
-                y: {
-                    formatter: function(value) {
-                        return 'Rp ' + value.toLocaleString('id-ID');
+                yaxis: [{
+                    title: {
+                        text: 'Booking',
+                        style: {
+                            color: '#FF6700'
+                        }
+                    },
+                }, {
+                    opposite: true,
+                    title: {
+                        text: 'Pendapatan',
+                        style: {
+                            color: '#1e293b'
+                        }
                     }
+                }],
+                legend: {
+                    position: 'top'
+                },
+                grid: {
+                    borderColor: '#f1f5f9'
                 }
-            },
-            markers: {
-                size: 4,
-                colors: ['#4361ee'],
-                strokeColors: '#fff',
-                strokeWidth: 2,
-                hover: {
-                    size: 6
-                }
-            }
-        };
-
-        const revenueChart = new ApexCharts(document.querySelector("#revenueChart"), revenueChartOptions);
-        revenueChart.render();
-
-        // Court Status Simulation
-        function simulateCourtStatus() {
-            const bars = document.querySelectorAll('.availability-fill');
-            bars.forEach(bar => {
-                const currentWidth = parseInt(bar.style.width);
-                const newWidth = Math.max(60, Math.min(95, currentWidth + (Math.random() * 10 - 5)));
-                bar.style.width = newWidth + '%';
-            });
-        }
-
-        setInterval(simulateCourtStatus, 30000);
-
-        // Real-time booking counter
-        function updateBookingCounter() {
-            const counter = document.querySelector('[data-target="booking-counter"]');
-            if (counter) {
-                const current = parseInt(counter.textContent);
-                const increment = Math.floor(Math.random() * 3);
-                counter.textContent = current + increment;
-            }
-        }
-
-        setInterval(updateBookingCounter, 10000);
-
-        // Live date time update
-        function updateLiveDateTime() {
-            const now = new Date();
-            const options = { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
             };
-            const dateTimeStr = now.toLocaleDateString('id-ID', options);
-            
-            const dateTimeElement = document.getElementById('currentDateTime');
-            if (dateTimeElement) {
-                dateTimeElement.textContent = dateTimeStr;
-            }
-        }
 
-        setInterval(updateLiveDateTime, 1000);
-        updateLiveDateTime();
+            var trafficChart = new ApexCharts(document.querySelector("#trafficChart"), trafficOptions);
+            trafficChart.render();
 
-        // Calendar interaction
-        document.querySelectorAll('.calendar-day-cell').forEach(cell => {
-            cell.addEventListener('click', function() {
-                const date = this.querySelector('span').textContent;
-                alert(`Viewing bookings for ${date} ${new Date().toLocaleString('id-ID', {month: 'long', year: 'numeric'})}`);
-            });
+            // 3. DONUT CHART (Popular Sports)
+            var sportsOptions = {
+                series: [45, 30, 25], // Badminton, Futsal, Tennis
+                chart: {
+                    type: 'donut',
+                    height: 250,
+                    fontFamily: 'Plus Jakarta Sans, sans-serif'
+                },
+                labels: ['Badminton', 'Futsal', 'Tennis'],
+                colors: ['#FF6700', '#1e293b', '#f59e0b'], // Sesuaikan dengan tema
+                plotOptions: {
+                    pie: {
+                        donut: {
+                            size: '70%',
+                            labels: {
+                                show: true,
+                                name: {
+                                    show: false
+                                },
+                                value: {
+                                    show: true,
+                                    fontSize: '24px',
+                                    fontWeight: 700,
+                                    color: '#1e293b',
+                                    formatter: function(val) {
+                                        return val + "%"
+                                    }
+                                },
+                                total: {
+                                    show: true,
+                                    showAlways: true,
+                                    label: 'Total',
+                                    fontSize: '14px',
+                                    color: '#64748b',
+                                    formatter: function(w) {
+                                        return "Populer"; // Teks tengah donut
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                legend: {
+                    show: false
+                }, // Kita pakai legend custom di HTML
+                stroke: {
+                    show: false
+                }
+            };
+
+            var sportsChart = new ApexCharts(document.querySelector("#sportsChart"), sportsOptions);
+            sportsChart.render();
         });
-
-        // Quick action animations
-        document.querySelectorAll('.action-btn').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px)';
-            });
-            
-            btn.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
-
-        // Table row hover effect
-        document.querySelectorAll('tbody tr').forEach(row => {
-            row.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = '#f8fafc';
-            });
-            
-            row.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '';
-            });
-        });
-
-        // Auto-refresh data every 2 minutes
-        setInterval(() => {
-            console.log('Refreshing dashboard data...');
-        }, 120000);
-
-        document.querySelector('.btn-light.rounded-pill')?.addEventListener('click', function(e) {
-            e.preventDefault();
-            this.innerHTML = '<span class="loading-spinner"></span> Generating...';
-            
-            setTimeout(() => {
-                this.innerHTML = '<i class="bi bi-download me-2"></i>Export Report';
-                alert('Report generated successfully! Download will start shortly.');
-            }, 1500);
-        });
-    });
-</script>
+    </script>
 @endpush

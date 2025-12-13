@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Venue;
 use App\Models\Booking;
-use App\Models\Court;
+use App\Http\Controllers\Controller;
 
 class DashboardController extends Controller
 {
     public function index()
     {
+        $totalVenues = Venue::count();
         $totalBookings = Booking::count();
-        $activeCourts  = Court::where('is_active', true)->count();
+        $activeBookings = Booking::where('status', 'pending')->count();
 
-        return view('admin.dashboard', compact('totalBookings', 'activeCourts'));
+        // 2. Ambil list Venue untuk ditampilkan (Grid View)
+        $venues = Venue::with('courts')->latest()->get();
+
+        return view('admin.dashboard', compact('totalVenues', 'totalBookings', 'activeBookings', 'venues'));
     }
 }
