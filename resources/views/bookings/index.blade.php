@@ -113,7 +113,7 @@
                                     </button>
                                 @elseif($booking->status == 'paid')
                                     {{-- JIKA STATUS PAID --}}
-                                    
+
                                     @if ($booking->rating)
                                         {{-- JIKA SUDAH RATING: Tombol Mati --}}
                                         <button disabled
@@ -134,11 +134,13 @@
                                                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
                                                 x-transition.opacity>
 
-                                                <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 relative">
-                                                    
+                                                <div
+                                                    class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md mx-4 relative">
+
                                                     <div class="flex justify-between items-center mb-4">
                                                         <h3 class="text-xl font-bold text-gray-800">Beri Penilaian</h3>
-                                                        <button @click="showModal = false" class="text-gray-400 hover:text-gray-600">
+                                                        <button @click="showModal = false"
+                                                            class="text-gray-400 hover:text-gray-600">
                                                             &times;
                                                         </button>
                                                     </div>
@@ -148,45 +150,61 @@
                                                         {{-- WARNING: WAKTU BELUM HABIS --}}
                                                         <div class="text-center py-4">
                                                             <div class="text-red-500 text-5xl mb-2">Wait! ✋</div>
-                                                            <p class="text-gray-700 font-medium">Anda hanya bisa memberikan rating setelah waktu bermain selesai.</p>
-                                                            <p class="text-gray-500 text-sm mt-1">Selesai pada: {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</p>
-                                                            <button @click="showModal = false" class="mt-6 w-full bg-gray-200 text-gray-800 font-bold py-2 rounded-lg hover:bg-gray-300">
+                                                            <p class="text-gray-700 font-medium">Anda hanya bisa memberikan
+                                                                rating setelah waktu bermain selesai.</p>
+                                                            <p class="text-gray-500 text-sm mt-1">Selesai pada:
+                                                                {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}
+                                                            </p>
+                                                            <button @click="showModal = false"
+                                                                class="mt-6 w-full bg-gray-200 text-gray-800 font-bold py-2 rounded-lg hover:bg-gray-300">
                                                                 Tutup
                                                             </button>
                                                         </div>
                                                     @else
                                                         {{-- FORM RATING --}}
-                                                        <form action="{{ route('rating.store', $booking->id) }}" method="POST">
+                                                        <form action="{{ route('rating.store', $booking->id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             <div class="flex justify-center mb-4 space-x-2">
                                                                 @foreach (range(1, 5) as $i)
                                                                     <label class="cursor-pointer">
-                                                                        <input type="radio" name="rating" value="{{ $i }}" class="hidden" @click="rating = {{ $i }}">
+                                                                        <input type="radio" name="rating"
+                                                                            value="{{ $i }}" class="hidden"
+                                                                            @click="rating = {{ $i }}">
                                                                         <svg class="w-10 h-10 transition-colors duration-200"
-                                                                            :class="rating >= {{ $i }} ? 'text-yellow-400 fill-current' : 'text-gray-300 fill-current'"
-                                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                                                            :class="rating >= {{ $i }} ?
+                                                                                'text-yellow-400 fill-current' :
+                                                                                'text-gray-300 fill-current'"
+                                                                            xmlns="http://www.w3.org/2000/svg"
+                                                                            viewBox="0 0 24 24">
+                                                                            <path
+                                                                                d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
                                                                         </svg>
                                                                     </label>
                                                                 @endforeach
                                                             </div>
                                                             <div class="mb-4">
-                                                                <label class="block text-gray-700 text-sm font-bold mb-2">Komentar (Opsional)</label>
-                                                                <textarea name="comment" rows="3" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Bagaimana pengalaman bermainmu?"></textarea>
+                                                                <label
+                                                                    class="block text-gray-700 text-sm font-bold mb-2">Komentar
+                                                                    (Opsional)</label>
+                                                                <textarea name="comment" rows="3"
+                                                                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                                    placeholder="Bagaimana pengalaman bermainmu?"></textarea>
                                                             </div>
                                                             <button type="submit" :disabled="rating === 0"
                                                                 class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                                                 Kirim Ulasan
                                                             </button>
                                                         </form>
-                                                    @endif 
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif 
+                                    @endif
                                     {{-- Penutup IF Rating --}}
 
-                                    <button class="mt-4 w-full bg-green-600 text-white text-sm font-bold py-2 rounded-lg cursor-not-allowed opacity-75">
+                                    <button
+                                        class="mt-4 w-full bg-green-600 text-white text-sm font-bold py-2 rounded-lg cursor-not-allowed opacity-75">
                                         Pembayaran Berhasil
                                     </button>
                                 @else
@@ -204,9 +222,10 @@
             </div>
         @endif
     </div>
+@endsection
 
-    {{-- Script JavaScript --}}
-    <script>
+@push('scripts')
+    {{-- <script>
         function confirmCancel(bookingId) {
             if (confirm("Apakah Anda yakin ingin membatalkan pemesanan ini?")) {
                 alert("Pembatalan untuk ID " + bookingId + " sedang diproses.");
@@ -220,5 +239,20 @@
         @if (session('error'))
             alert("{{ session('error') }}");
         @endif
-    </script>
-@endsection
+    </script> --}}
+
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: "{{ session('success') }}",
+                    icon: 'success',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Oke'
+                });
+            });
+        </script>
+    @endif
+@endpush

@@ -45,6 +45,6 @@ class RatingController extends Controller
             'comment'    => $request->comment
         ]);
         
-        return redirect('/my-bookings');
+        return redirect('my.bookings')->with('success', 'Rating berhasil diberikan!');
     }
 }
