@@ -58,4 +58,26 @@ class Booking extends Model
     {
         return $this->status === 'completed';
     }
+
+    // Accessor untuk breakdown harga
+    public function getCourtPriceAttribute()
+    {
+        // Hitung court price dari total (reverse calculation)
+        // Formula: total = subtotal + (subtotal * 0.1)
+        // total = subtotal * 1.1
+        // subtotal = total / 1.1
+        return round($this->total_price / 1.1, 0);
+    }
+
+    public function getTaxAttribute()
+    {
+        // Tax adalah 10% dari court price (subtotal)
+        return round($this->court_price * 0.1, 0);
+    }
+
+    public function getServiceFeeAttribute()
+    {
+        // Service fee 0 (tidak ada di perhitungan)
+        return 0;
+    }
 }

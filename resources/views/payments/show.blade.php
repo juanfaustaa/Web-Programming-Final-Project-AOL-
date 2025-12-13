@@ -168,25 +168,25 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @php
-                            $selectedMethod = old('method', 'qris');
+                            $selectedMethod = old('method', 'cash');
                         @endphp
 
-                        <!-- QRIS -->
+                        <!-- Cash -->
                         <div class="group cursor-pointer">
-                            <input class="hidden" type="radio" name="method" id="qris" value="qris" required 
-                                   {{ $selectedMethod == 'qris' ? 'checked' : '' }}>
-                            <label for="qris" 
+                            <input class="hidden" type="radio" name="method" id="cash" value="cash" required 
+                                   {{ $selectedMethod == 'cash' ? 'checked' : '' }}>
+                            <label for="cash" 
                                    class="group relative flex flex-col items-center bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-[#FF6700] hover:shadow-xl transition-all duration-300 group-has-[:checked]:border-[#FF6700] group-has-[:checked]:bg-gradient-to-r group-has-[:checked]:from-orange-50 group-has-[:checked]:to-red-50 overflow-hidden">
                                 <div class="absolute top-0 right-0 w-20 h-20 bg-orange-100 rounded-full -mr-10 -mt-10 opacity-0 group-has-[:checked]:opacity-100 transition-opacity duration-500"></div>
                                 
                                 <div class="relative z-10 mb-4">
                                     <div class="w-16 h-16 rounded-xl bg-gradient-to-r from-[#FF6700] to-orange-600 flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-qrcode text-white text-2xl"></i>
+                                        <i class="fas fa-money-bill-wave text-white text-2xl"></i>
                                     </div>
                                 </div>
                                 <div class="relative z-10 flex-grow text-center">
-                                    <h4 class="text-lg font-bold text-gray-900 mb-2">QRIS</h4>
-                                    <p class="text-sm text-gray-600 mb-4">Scan QR Code</p>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">Cash</h4>
+                                    <p class="text-sm text-gray-600 mb-4">Pay on Venue</p>
                                     <div class="flex items-center justify-center text-[#FF6700]">
                                         <span class="text-xs font-bold px-3 py-1 rounded-full bg-orange-100">
                                             <i class="fas fa-bolt mr-1"></i>Instant
@@ -203,9 +203,9 @@
 
                         <!-- Bank Transfer -->
                         <div class="group cursor-pointer">
-                            <input class="hidden" type="radio" name="method" id="bank_transfer" value="bank_transfer" required 
-                                   {{ $selectedMethod == 'bank_transfer' ? 'checked' : '' }}>
-                            <label for="bank_transfer" 
+                            <input class="hidden" type="radio" name="method" id="transfer" value="transfer" required 
+                                   {{ $selectedMethod == 'transfer' ? 'checked' : '' }}>
+                            <label for="transfer" 
                                    class="group relative flex flex-col items-center bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-[#FF6700] hover:shadow-xl transition-all duration-300 group-has-[:checked]:border-[#FF6700] group-has-[:checked]:bg-gradient-to-r group-has-[:checked]:from-orange-50 group-has-[:checked]:to-red-50 overflow-hidden">
                                 <div class="absolute top-0 right-0 w-20 h-20 bg-orange-100 rounded-full -mr-10 -mt-10 opacity-0 group-has-[:checked]:opacity-100 transition-opacity duration-500"></div>
                                 
@@ -231,22 +231,22 @@
                             </label>
                         </div>
 
-                        <!-- E-Wallet -->
+                        <!-- Virtual Account -->
                         <div class="group cursor-pointer">
-                            <input class="hidden" type="radio" name="method" id="e_wallet" value="e_wallet" required 
-                                   {{ $selectedMethod == 'e_wallet' ? 'checked' : '' }}>
-                            <label for="e_wallet" 
+                            <input class="hidden" type="radio" name="method" id="virtual_account" value="virtual account" required 
+                                   {{ $selectedMethod == 'virtual account' ? 'checked' : '' }}>
+                            <label for="virtual_account" 
                                    class="group relative flex flex-col items-center bg-white border-2 border-gray-200 rounded-2xl p-6 hover:border-[#FF6700] hover:shadow-xl transition-all duration-300 group-has-[:checked]:border-[#FF6700] group-has-[:checked]:bg-gradient-to-r group-has-[:checked]:from-orange-50 group-has-[:checked]:to-red-50 overflow-hidden">
                                 <div class="absolute top-0 right-0 w-20 h-20 bg-orange-100 rounded-full -mr-10 -mt-10 opacity-0 group-has-[:checked]:opacity-100 transition-opacity duration-500"></div>
                                 
                                 <div class="relative z-10 mb-4">
                                     <div class="w-16 h-16 rounded-xl bg-gradient-to-r from-[#FF6700] to-orange-600 flex items-center justify-center shadow-lg">
-                                        <i class="fas fa-mobile-alt text-white text-2xl"></i>
+                                        <i class="fas fa-credit-card text-white text-2xl"></i>
                                     </div>
                                 </div>
                                 <div class="relative z-10 flex-grow text-center">
-                                    <h4 class="text-lg font-bold text-gray-900 mb-2">E-Wallet</h4>
-                                    <p class="text-sm text-gray-600 mb-4">Gopay, OVO, DANA</p>
+                                    <h4 class="text-lg font-bold text-gray-900 mb-2">Virtual Account</h4>
+                                    <p class="text-sm text-gray-600 mb-4">BCA VA, BNI VA, etc</p>
                                     <div class="flex items-center justify-center text-[#FF6700]">
                                         <span class="text-xs font-bold px-3 py-1 rounded-full bg-orange-100">
                                             <i class="fas fa-bolt mr-1"></i>Instant
@@ -264,41 +264,38 @@
 
                     <!-- Payment Instructions -->
                     <div class="mt-8 pt-8 border-t border-gray-200 border-dashed">
-                        <div id="qris-instructions" class="payment-instructions hidden bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6">
+                        <div id="cash-instructions" class="payment-instructions hidden bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6">
                             <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                                <i class="fas fa-qrcode text-[#FF6700] mr-2"></i>
-                                QRIS Payment Instructions
+                                <i class="fas fa-money-bill-wave text-[#FF6700] mr-2"></i>
+                                Cash Payment Instructions
                             </h4>
                             <ol class="space-y-3 text-gray-700">
                                 <li class="flex items-start">
                                     <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mr-3">1</span>
-                                    <span>Open your banking or e-wallet app</span>
+                                    <span>Datang ke venue pada waktu booking Anda</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mr-3">2</span>
-                                    <span>Select "Scan QR Code" feature</span>
+                                    <span>Tunjukkan booking ID kepada staff venue</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mr-3">3</span>
-                                    <span>Scan the QR code below</span>
+                                    <span>Lakukan pembayaran tunai di kasir</span>
                                 </li>
                                 <li class="flex items-start">
                                     <span class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 text-green-800 flex items-center justify-center mr-3">4</span>
-                                    <span>Confirm payment amount: <span class="font-bold">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</span></span>
+                                    <span>Total yang harus dibayar: <span class="font-bold">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</span></span>
                                 </li>
                             </ol>
-                            <div class="mt-6 flex justify-center">
-                                <div class="bg-white p-4 rounded-lg shadow-lg">
-                                    <!-- Placeholder for QR Code -->
-                                    <div class="w-48 h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-qrcode text-gray-400 text-4xl"></i>
-                                    </div>
-                                    <p class="text-center text-sm text-gray-500 mt-2">Scan this QR code</p>
-                                </div>
+                            <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                                <p class="text-sm text-gray-700">
+                                    <i class="fas fa-info-circle text-yellow-600 mr-2"></i>
+                                    <strong>Catatan:</strong> Booking ID Anda adalah <strong>#{{ $booking->id }}</strong>
+                                </p>
                             </div>
                         </div>
 
-                        <div id="bank-instructions" class="payment-instructions hidden bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6">
+                        <div id="transfer-instructions" class="payment-instructions hidden bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl p-6">
                             <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
                                 <i class="fas fa-university text-[#FF6700] mr-2"></i>
                                 Bank Transfer Instructions
@@ -333,42 +330,42 @@
                             </div>
                         </div>
 
-                        <div id="ewallet-instructions" class="payment-instructions hidden bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6">
+                        <div id="virtual account-instructions" class="payment-instructions hidden bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-6">
                             <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                                <i class="fas fa-mobile-alt text-[#FF6700] mr-2"></i>
-                                E-Wallet Instructions
+                                <i class="fas fa-credit-card text-[#FF6700] mr-2"></i>
+                                Virtual Account Instructions
                             </h4>
                             <div class="space-y-4">
                                 <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 rounded-lg bg-gray-100 flex items-center justify-center">
-                                        <span class="font-bold text-gray-700">G</span>
-                                    </div>
-                                    <div class="flex-grow">
-                                        <h6 class="font-bold text-gray-800">Gopay</h6>
-                                        <p class="text-sm text-gray-600">0821 2345 6789</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center space-x-4">
                                     <div class="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
-                                        <span class="font-bold text-blue-700">O</span>
+                                        <span class="font-bold text-blue-700">BCA</span>
                                     </div>
                                     <div class="flex-grow">
-                                        <h6 class="font-bold text-gray-800">OVO</h6>
-                                        <p class="text-sm text-gray-600">0821 2345 6789</p>
+                                        <h6 class="font-bold text-gray-800">BCA Virtual Account</h6>
+                                        <p class="text-sm text-gray-600">8012 3456 7890</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center space-x-4">
-                                    <div class="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center">
-                                        <span class="font-bold text-green-700">D</span>
+                                    <div class="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center">
+                                        <span class="font-bold text-orange-700">BNI</span>
                                     </div>
                                     <div class="flex-grow">
-                                        <h6 class="font-bold text-gray-800">DANA</h6>
-                                        <p class="text-sm text-gray-600">0821 2345 6789</p>
+                                        <h6 class="font-bold text-gray-800">BNI Virtual Account</h6>
+                                        <p class="text-sm text-gray-600">9012 3456 7890</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center space-x-4">
+                                    <div class="w-12 h-12 rounded-lg bg-red-100 flex items-center justify-center">
+                                        <span class="font-bold text-red-700">BRI</span>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h6 class="font-bold text-gray-800">BRI Virtual Account</h6>
+                                        <p class="text-sm text-gray-600">7012 3456 7890</p>
                                     </div>
                                 </div>
                                 <p class="text-sm text-gray-600 mt-4">
                                     <i class="fas fa-info-circle text-[#FF6700] mr-1"></i>
-                                    Transfer exact amount: <span class="font-bold">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</span> and include booking ID: <span class="font-bold">#{{ $booking->id }}</span>
+                                    Transfer exact amount: <span class="font-bold">Rp {{ number_format($booking->total_price, 0, ',', '.') }}</span> dengan booking ID: <span class="font-bold">#{{ $booking->id }}</span>
                                 </p>
                             </div>
                         </div>
@@ -533,7 +530,7 @@
         if (selectedMethod) {
             showInstructions(selectedMethod.value);
         } else {
-            showInstructions('qris');
+            showInstructions('cash');
         }
         
         // Add event listeners
@@ -543,33 +540,115 @@
             });
         });
         
-        // Form submission confirmation
+        // Form submission confirmation with SweetAlert2
         const paymentForm = document.getElementById('paymentForm');
         if (paymentForm) {
             paymentForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
                 const selectedMethod = document.querySelector('input[name="method"]:checked');
                 if (!selectedMethod) {
-                    e.preventDefault();
-                    alert('Please select a payment method');
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Pilih Metode Pembayaran',
+                        text: 'Silakan pilih metode pembayaran terlebih dahulu',
+                        confirmButtonColor: '#FF6700'
+                    });
                     return;
                 }
                 
-                const methodName = selectedMethod.value === 'qris' ? 'QRIS' : 
-                                 selectedMethod.value === 'bank_transfer' ? 'Bank Transfer' : 
-                                 selectedMethod.value === 'e_wallet' ? 'E-Wallet' : 'selected method';
+                const methodName = selectedMethod.value === 'cash' ? 'Cash' : 
+                                 selectedMethod.value === 'transfer' ? 'Bank Transfer' : 
+                                 selectedMethod.value === 'virtual account' ? 'Virtual Account' : 'selected method';
                 
-                const confirmation = confirm(`Confirm payment via ${methodName}?\n\nAmount: Rp {{ number_format($booking->total_price, 0, ',', '.') }}\nBooking ID: #{{ $booking->id }}`);
-                
-                if (!confirmation) {
-                    e.preventDefault();
-                }
+                Swal.fire({
+                    title: 'Konfirmasi Pembayaran',
+                    html: `
+                        <div class="text-left">
+                            <p class="mb-2"><strong>Metode:</strong> ${methodName}</p>
+                            <p class="mb-2"><strong>Jumlah:</strong> Rp {{ number_format($booking->total_price, 0, ',', '.') }}</p>
+                            <p class="mb-2"><strong>Booking ID:</strong> #{{ $booking->id }}</p>
+                        </div>
+                    `,
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonColor: '#FF6700',
+                    cancelButtonColor: '#6c757d',
+                    confirmButtonText: 'Ya, Bayar Sekarang!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Memproses Pembayaran...',
+                            html: 'Mohon tunggu sebentar',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                        
+                        // Submit form via AJAX
+                        const formData = new FormData(paymentForm);
+                        
+                        fetch(paymentForm.action, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
+                            }
+                        })
+                        .then(response => {
+                            if (response.redirected) {
+                                // Show success popup then redirect
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Pembayaran Berhasil!',
+                                    html: `
+                                        <div class="text-center">
+                                            <i class="fas fa-check-circle text-green-500" style="font-size: 4rem; margin: 20px 0;"></i>
+                                            <p class="text-lg mb-2">Booking Anda telah dikonfirmasi!</p>
+                                            <p class="text-gray-600">Booking ID: <strong>#{{ $booking->id }}</strong></p>
+                                            <p class="text-gray-600 mt-2">Terima kasih atas pembayaran Anda</p>
+                                        </div>
+                                    `,
+                                    showConfirmButton: true,
+                                    confirmButtonColor: '#FF6700',
+                                    confirmButtonText: 'OK',
+                                    timer: 3000,
+                                    timerProgressBar: true
+                                }).then(() => {
+                                    window.location.href = response.url;
+                                });
+                            } else {
+                                return response.json();
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Terjadi kesalahan saat memproses pembayaran. Silakan coba lagi.',
+                                confirmButtonColor: '#FF6700'
+                            });
+                        });
+                    }
+                });
             });
         }
     });
 </script>
+
+<!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 @endpush
 
 @push('styles')
+<!-- SweetAlert2 CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 <style>
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
     @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
