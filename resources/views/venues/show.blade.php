@@ -31,6 +31,18 @@
             padding-bottom: 48px;
         }
 
+        .time-slot.passed {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: var(--gray-100);
+            border-color: var(--gray-200);
+        }
+
+        .passed-label {
+            background: rgba(100, 116, 139, 0.1);
+            color: var(--secondary);
+        }
+
         /* Image Gallery */
         .image-gallery-card {
             border: none;
@@ -686,13 +698,38 @@
                                 <label class="form-label">Choose Time Slot</label>
                                 <div class="time-slots-container" id="timeSlotsContainer">
                                     @foreach ($availableSlots as $index => $slot)
-                                        <div class="time-slot {{ !$slot['is_available'] ? 'booked' : '' }}"
-                                            data-slot="{{ $index }}" data-start="{{ $slot['start'] }}"
+                                        @php
+                                            $slotClass = '';
+                                            $statusClass = '';
+                                            $statusText = '';
+                                            $onclick = '';
+                                            
+                                            if (isset($slot['is_passed']) && $slot['is_passed']) {
+                                                $slotClass = 'passed';
+                                                $statusClass = 'passed-label';
+                                                $statusText = 'Passed';
+                                                $onclick = '';
+                                            } elseif (!$slot['is_available']) {
+                                                $slotClass = 'booked';
+                                                $statusClass = 'booked';
+                                                $statusText = 'Full';
+                                                $onclick = '';
+                                            } else {
+                                                $slotClass = '';
+                                                $statusClass = 'available';
+                                                $statusText = $slot['available_courts'] . ' Available';
+                                                $onclick = "selectTimeSlot(this, '{$slot['start']}', '{$slot['end']}')";
+                                            }
+                                        @endphp
+                                        
+                                        <div class="time-slot {{ $slotClass }}"
+                                            data-slot="{{ $index }}" 
+                                            data-start="{{ $slot['start'] }}"
                                             data-end="{{ $slot['end'] }}"
-                                            onclick="{{ $slot['is_available'] ? "selectTimeSlot(this, '$slot[start]', '$slot[end]')" : '' }}">
+                                            @if($onclick) onclick="{{ $onclick }}" @endif>
                                             <span class="time-range">{{ $slot['display'] }}</span>
-                                            <span class="slot-status {{ $slot['is_available'] ? 'available' : 'booked' }}">
-                                                {{ $slot['is_available'] ? $slot['available_courts'] . ' Available' : 'Full' }}
+                                            <span class="slot-status {{ $statusClass }}">
+                                                {{ $statusText }}
                                             </span>
                                         </div>
                                     @endforeach
@@ -702,8 +739,8 @@
                             <div class="mb-4">
                                 <label class="form-label">Duration</label>
                                 <select class="form-control-custom" id="duration" onchange="updateEndTime()">
-                                    <option value="1">1 hour</option>
-                                    <option value="2" selected>2 hours</option>
+                                    <option value="1" selected>1 hour</option>
+                                    <option value="2">2 hours</option>
                                     <option value="3">3 hours</option>
                                     <option value="4">4 hours</option>
                                 </select>
@@ -717,22 +754,22 @@
                                 </div>
                                 <div class="summary-row">
                                     <span>Duration</span>
-                                    <span id="durationText">2 hours</span>
+                                    <span id="durationText">1 hour</span>
                                 </div>
                                 <div class="summary-row">
                                     <span>Subtotal</span>
                                     <span id="subtotalText">Rp
-                                        {{ number_format($venue->price_per_hour * 2, 0, ',', '.') }}</span>
+                                        {{ number_format($venue->price_per_hour * 1, 0, ',', '.') }}</span>
                                 </div>
                                 <div class="summary-row">
                                     <span>Tax (10%)</span>
                                     <span id="taxText">Rp
-                                        {{ number_format($venue->price_per_hour * 2 * 0.1, 0, ',', '.') }}</span>
+                                        {{ number_format($venue->price_per_hour * 1 * 0.1, 0, ',', '.') }}</span>
                                 </div>
                                 <div class="summary-row">
                                     <span>Total</span>
                                     <span id="totalText">Rp
-                                        {{ number_format($venue->price_per_hour * 2 * 1.1, 0, ',', '.') }}</span>
+                                        {{ number_format($venue->price_per_hour * 1 * 1.1, 0, ',', '.') }}</span>
                                 </div>
                             </div>
 
@@ -785,12 +822,16 @@
 
     @push('scripts')
         <script>
-            // Script JavaScript yang sama seperti sebelumnya
             const pricePerHour = {{ $venue->price_per_hour }};
             let selectedStartTime = null;
             let selectedEndTime = null;
 
             function selectTimeSlot(element, startTime, endTime) {
+                // Prevent selection if slot is booked or passed
+                if (element.classList.contains('booked') || element.classList.contains('passed')) {
+                    return;
+                }
+                
                 document.querySelectorAll('.time-slot').forEach(slot => {
                     slot.classList.remove('selected');
                 });
@@ -815,6 +856,7 @@
 
                 if (endHour > 21) {
                     alert('Duration exceeds operating hours. Please select earlier time slot or shorter duration.');
+                    document.getElementById('addToCartBtn').disabled = true;
                     return;
                 }
 

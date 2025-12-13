@@ -53,15 +53,26 @@ class venueController extends Controller
             $date = now()->toDateString();
         }
 
+        $isToday = Carbon::parse($date)->isToday();
+        $currentHour = now()->hour;
+
         // Generate time slots (08:00 - 21:00, 1 hour each)
         $slots = [];
         for ($h = 8; $h < 21; $h++) {
             $startTime = sprintf('%02d:00', $h);
             $endTime = sprintf('%02d:00', $h + 1);
+
+            // Check if slot has passed (only for today)
+            $isPassed = false;
+            if ($isToday && $h <= $currentHour) {
+                $isPassed = true;
+            }
+
             $slots[] = [
                 'start' => $startTime,
                 'end' => $endTime,
-                'display' => "$startTime - $endTime"
+                'display' => "$startTime - $endTime",
+                'is_passed' => $isPassed
             ];
         }
 
@@ -80,13 +91,18 @@ class venueController extends Controller
         foreach ($slots as $slot) {
             $bookedCount = $bookings->get($slot['start'], collect())->count();
             $totalCourts = $venue->courts()->where('is_active', true)->count();
+            $availableCourts = $totalCourts - $bookedCount;
+
+            // Slot tidak available jika: sudah penuh ATAU sudah lewat
+            $isAvailable = $availableCourts > 0 && !$slot['is_passed'];
             
             $availableSlots[] = [
                 'start' => $slot['start'],
                 'end' => $slot['end'],
                 'display' => $slot['display'],
-                'available_courts' => $totalCourts - $bookedCount,
-                'is_available' => ($totalCourts - $bookedCount) > 0
+                'available_courts' => $availableCourts,
+                'is_available' => $isAvailable,
+                'is_passed' => $slot['is_passed']
             ];
         }
 
