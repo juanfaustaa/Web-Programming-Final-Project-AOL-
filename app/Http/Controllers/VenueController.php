@@ -109,7 +109,7 @@ class venueController extends Controller
         // Calculate duration in hours
         $start = Carbon::parse($request->date . ' ' . $request->start_time);
         $end = Carbon::parse($request->date . ' ' . $request->end_time);
-        $duration = $end->diffInHours($start);
+        $duration = $start->diffInHours($end);
         
         // Calculate price
         $pricePerHour = $venue->price_per_hour;
