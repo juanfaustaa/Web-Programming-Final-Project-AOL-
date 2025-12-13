@@ -656,7 +656,7 @@
                     </div>
 
                     <div
-                        class="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-xl border border-gray-100 flex items-center gap-4 hidden md:flex">
+                        class="absolute -bottom-6 -left-6 bg-white p-4 rounded-lg shadow-xl border border-gray-100 hidden md:flex items-center gap-4">
                         <div class="text-center">
                             <span class="block text-xs font-bold text-gray-400">Ambatukam</span>
                             <span class="block text-2xl font-black text-gray-800">21</span>
