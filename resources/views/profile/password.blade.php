@@ -82,7 +82,7 @@
                             <i class="fas fa-check text-green-600"></i>
                         </div>
                         <div>
-                            <p class="text-sm font-medium text-gray-900">Use at least 12 characters</p>
+                            <p class="text-sm font-medium text-gray-900">Use at least 8 characters</p>
                             <p class="text-xs text-gray-600">Longer passwords are more secure</p>
                         </div>
                     </div>
@@ -179,8 +179,8 @@
         }
     }
     
-    .fa-check.text-green-500 {
-        color: #10b981;
+    .fa-check.text-green-600 {
+        color: #16a34a;
     }
 </style>
 @endpush
@@ -199,40 +199,6 @@
                 }, 500);
             }, 5000);
         }
-
-        // Password strength checker
-        const passwordInput = document.getElementById('password');
-        const currentPasswordInput = document.getElementById('current_password');
-
-        // Add show/hide password functionality
-        function togglePasswordVisibility(inputId, button) {
-            const input = document.getElementById(inputId);
-            const icon = button.querySelector('i');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.className = 'fas fa-eye-slash';
-            } else {
-                input.type = 'password';
-                icon.className = 'fas fa-eye';
-            }
-        }
-
-        // Add eye icons to password fields
-        const passwordFields = document.querySelectorAll('input[type="password"]');
-        passwordFields.forEach(field => {
-            const parent = field.parentElement;
-            if (parent.classList.contains('relative')) {
-                const eyeButton = document.createElement('button');
-                eyeButton.type = 'button';
-                eyeButton.className = 'absolute right-3 top-3 text-gray-400 hover:text-gray-600';
-                eyeButton.innerHTML = '<i class="fas fa-eye"></i>';
-                eyeButton.onclick = function() {
-                    togglePasswordVisibility(field.id, this);
-                };
-                parent.appendChild(eyeButton);
-            }
-        });
     });
 </script>
 @endpush

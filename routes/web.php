@@ -107,9 +107,25 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function () {
 });
 
 
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'show'])->name('profile');
+
+//     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+// });
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    // Profile routes (using Breeze structure)
+    Route::get('/profile', [ProfileController::class, 'show'])->name('profile.show');
+    
+    // Edit profile (using existing Breeze form)
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    
+    // New routes for separate pages
+    Route::get('/profile/password', [ProfileController::class, 'password'])->name('password.edit');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::get('/profile/delete', [ProfileController::class, 'delete'])->name('profile.delete');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
