@@ -107,9 +107,6 @@ Route::prefix('admin')->middleware(['auth','is_admin'])->group(function () {
     Route::get('/transactions', [AdminTransactionController::class, 'index'])->name('transactions.index');
 });
 
-Route::get('/', [HomeController::class, 'index'])
-    ->middleware(['auth', 'is_user'])
-    ->name('home');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
