@@ -11,7 +11,7 @@
             --card-border: #f1f5f9;
         }
 
-        /* 1. HERO SECTION (Updated) */
+        /* 1. HERO SECTION */
         .welcome-card {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             border-radius: 24px;
@@ -34,7 +34,7 @@
             filter: blur(40px);
         }
 
-        /* 2. ANALYTICS CARDS (Mixed Chart Section) */
+        /* 2. ANALYTICS CARDS */
         .chart-card {
             background: white;
             border-radius: 24px;
@@ -64,7 +64,7 @@
             color: #64748b;
         }
 
-        /* 3. MINI STAT CARDS (Clean Style) */
+        /* 3. MINI STAT CARDS */
         .mini-stat-card {
             background: white;
             border-radius: 16px;
@@ -92,7 +92,7 @@
             font-size: 1.5rem;
         }
 
-        /* 4. RECENT BOOKINGS LIST (Modern List) */
+        /* 4. RECENT BOOKINGS LIST */
         .booking-item {
             display: flex;
             align-items: center;
@@ -108,18 +108,6 @@
             min-width: 80px;
             font-weight: 600;
             color: var(--text-dark);
-        }
-
-        .booking-info h6 {
-            margin: 0;
-            font-size: 0.95rem;
-            font-weight: 600;
-        }
-
-        .booking-info p {
-            margin: 0;
-            font-size: 0.8rem;
-            color: #64748b;
         }
 
         /* Animations */
@@ -176,45 +164,51 @@
         <div class="row g-4 mb-4 animate-up delay-100">
             <div class="col-md-3">
                 <div class="mini-stat-card">
-                    <div class="icon-box bg-orange-100 text-orange-600" style="background: #fff7ed; color: #ea580c;">
+                    <div class="icon-box" style="background: #fff7ed; color: #ea580c;">
                         <i class="bi bi-wallet2"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">Rp 12.5M</h4>
+                        <h4 class="fw-bold mb-0">
+                            @if ($stats['revenue_today'] >= 1000000)
+                                Rp {{ number_format($stats['revenue_today'] / 1000000, 1) }}Jt
+                            @else
+                                Rp {{ number_format($stats['revenue_today'] / 1000, 0) }}
+                            @endif
+                        </h4>
                         <small class="text-muted">Pendapatan Hari Ini</small>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="mini-stat-card">
-                    <div class="icon-box bg-blue-100 text-blue-600" style="background: #eff6ff; color: #2563eb;">
+                    <div class="icon-box" style="background: #eff6ff; color: #2563eb;">
                         <i class="bi bi-calendar-check"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">86</h4>
+                        <h4 class="fw-bold mb-0">{{ $stats['total_booking'] }}</h4>
                         <small class="text-muted">Total Booking</small>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="mini-stat-card">
-                    <div class="icon-box bg-green-100 text-green-600" style="background: #f0fdf4; color: #16a34a;">
-                        <i class="bi bi-graph-up-arrow"></i>
+                    <div class="icon-box" style="background: #f0fdf4; color: #16a34a;">
+                        <i class="bi bi-shop"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">92%</h4>
-                        <small class="text-muted">Tingkat Okupansi</small>
+                        <h4 class="fw-bold mb-0">{{ $stats['active_venues'] }}</h4>
+                        <small class="text-muted">Venue Aktif</small>
                     </div>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="mini-stat-card">
-                    <div class="icon-box bg-purple-100 text-purple-600" style="background: #faf5ff; color: #9333ea;">
+                    <div class="icon-box" style="background: #faf5ff; color: #9333ea;">
                         <i class="bi bi-people"></i>
                     </div>
                     <div>
-                        <h4 class="fw-bold mb-0">12</h4>
-                        <small class="text-muted">User Baru</small>
+                        <h4 class="fw-bold mb-0">{{ $stats['new_users'] }}</h4>
+                        <small class="text-muted">User Baru (Bulan Ini)</small>
                     </div>
                 </div>
             </div>
@@ -231,7 +225,6 @@
                         </div>
                         <select class="form-select form-select-sm w-auto border-0 bg-light fw-bold text-secondary">
                             <option>7 Hari Terakhir</option>
-                            <option>Bulan Ini</option>
                         </select>
                     </div>
                     <div id="trafficChart" style="min-height: 350px;"></div>
@@ -247,6 +240,7 @@
                         </div>
                         <button class="btn btn-sm btn-light border-0"><i class="bi bi-three-dots"></i></button>
                     </div>
+
                     <div id="sportsChart" style="min-height: 250px; display: flex; justify-content: center;"></div>
 
                     <div class="mt-4">
@@ -258,21 +252,21 @@
                                 <span class="badge rounded-circle p-1" style="background: #FF6700;"> </span>
                                 <span class="small fw-semibold">Badminton</span>
                             </div>
-                            <span class="small fw-bold">45%</span>
+                            <span class="small fw-bold">{{ $sportPercentages[0] ?? 0 }} Data</span>
                         </div>
                         <div class="d-flex align-items-center justify-content-between mb-2 p-2 rounded hover-bg-light">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge rounded-circle p-1" style="background: #1e293b;"> </span>
                                 <span class="small fw-semibold">Futsal</span>
                             </div>
-                            <span class="small fw-bold">30%</span>
+                            <span class="small fw-bold">{{ $sportPercentages[1] ?? 0 }} Data</span>
                         </div>
                         <div class="d-flex align-items-center justify-content-between p-2 rounded hover-bg-light">
                             <div class="d-flex align-items-center gap-2">
                                 <span class="badge rounded-circle p-1" style="background: #f59e0b;"> </span>
                                 <span class="small fw-semibold">Tennis/Padel</span>
                             </div>
-                            <span class="small fw-bold">25%</span>
+                            <span class="small fw-bold">{{ $sportPercentages[2] ?? 0 }} Data</span>
                         </div>
                     </div>
                 </div>
@@ -280,6 +274,7 @@
         </div>
 
         <div class="row g-4 animate-up delay-300">
+
             <div class="col-lg-6">
                 <div class="chart-card">
                     <div class="chart-header">
@@ -292,70 +287,96 @@
                     </div>
 
                     <div class="booking-list">
-                        @foreach ([1, 2, 3, 4] as $i)
+                        @forelse($recentBookings as $booking)
                             <div class="booking-item">
                                 <div class="booking-time">
-                                    <span class="d-block text-dark">{{ 10 + $i }}:00</span>
+                                    <span class="d-block text-dark">{{ $booking->time }}</span>
                                     <span class="badge bg-light text-secondary rounded-pill"
-                                        style="font-size: 10px;">AM</span>
+                                        style="font-size: 10px;">WIB</span>
                                 </div>
-                                <div class="booking-info flex-grow-1">
-                                    <h6>{{ ['Court A - Badminton', 'Court C - Futsal', 'Court B - Tennis', 'Court A - Padel'][$i - 1] }}
-                                    </h6>
-                                    <p>Oleh: {{ ['Budi Santoso', 'Siti Aminah', 'Rahmat Hidayat', 'Dewi Lestari'][$i - 1] }}
-                                    </p>
+                                <div class="booking-info flex-grow-1 px-3">
+                                    <h6 class="text-dark">{{ $booking->court }}</h6>
+                                    <p class="small text-muted">Customer: {{ $booking->customer }}</p>
                                 </div>
                                 <div class="booking-status">
-                                    @if ($i == 1)
+                                    @if ($booking->status == 'pending')
                                         <span
                                             class="badge bg-warning bg-opacity-10 text-warning px-3 py-2 rounded-pill">Pending</span>
-                                    @elseif($i == 2)
+                                    @elseif($booking->status == 'confirmed' || $booking->status == 'completed')
                                         <span
                                             class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill">Paid</span>
+                                    @elseif($booking->status == 'cancelled')
+                                        <span
+                                            class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill">Cancel</span>
                                     @else
                                         <span
-                                            class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">Booked</span>
+                                            class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">{{ $booking->status }}</span>
                                     @endif
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="text-center py-4 text-muted small">Belum ada booking terbaru.</div>
+                        @endforelse
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-6">
-                <div class="chart-card bg-dark text-white" style="background: #111827; border: none;">
+                <div class="chart-card bg-dark text-white border-0" style="background: #111827;">
                     <div class="chart-header">
                         <div class="chart-title">
-                            <h5 class="text-white">Status Lapangan (Live)</h5>
-                            <span class="text-white-50"><span class="badge bg-danger rounded-circle p-1 me-1"> </span>
-                                Real-time monitoring</span>
+                            <h5 class="text-white">Lapangan Terlaris</h5>
+                            <span class="text-white-50">Top 5 Court Berdasarkan Booking</span>
                         </div>
+                        <button class="btn btn-sm btn-outline-secondary border-0 text-white-50">
+                            <i class="bi bi-filter"></i>
+                        </button>
                     </div>
 
-                    <div class="row g-3">
-                        @foreach (['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as $court)
-                            <div class="col-4">
-                                <div class="p-3 rounded-3 text-center transition-transform hover-scale"
-                                    style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
-                                    <small class="d-block text-white-50 mb-2">Court {{ $court }}</small>
-                                    @if ($loop->index % 3 == 0)
-                                        <i class="bi bi-check-circle-fill text-success fs-3"></i>
-                                        <div class="small text-success mt-1">Kosong</div>
-                                    @elseif($loop->index % 3 == 1)
-                                        <i class="bi bi-x-circle-fill text-danger fs-3"></i>
-                                        <div class="small text-danger mt-1">Dipakai</div>
-                                    @else
-                                        <i class="bi bi-clock-fill text-warning fs-3"></i>
-                                        <div class="small text-warning mt-1">Booked</div>
-                                    @endif
+                    <div class="court-list d-flex flex-column gap-3">
+                        @forelse($popularCourts as $index => $court)
+                            <div class="court-item p-3 rounded-3"
+                                style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05);">
+                                <div class="d-flex align-items-center justify-content-between mb-2">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="d-flex align-items-center justify-content-center rounded-circle fw-bold"
+                                            style="width: 32px; height: 32px; 
+                                            background: {{ $index == 0 ? '#FF6700' : ($index == 1 ? '#334155' : 'rgba(255,255,255,0.1)') }}; 
+                                            color: {{ $index == 0 ? 'white' : 'rgba(255,255,255,0.7)' }};">
+                                            {{ $index + 1 }}
+                                        </div>
+
+                                        <div>
+                                            <h6 class="mb-0 text-white" style="font-size: 0.95rem;">{{ $court->name }}
+                                            </h6>
+                                            <small class="text-white-50"
+                                                style="font-size: 0.75rem;">{{ $court->type }}</small>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-end">
+                                        <span class="d-block fw-bold text-white">{{ $court->total_bookings }} <span
+                                                class="small fw-normal text-white-50">Bookings</span></span>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="progress flex-grow-1"
+                                        style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                                        <div class="progress-bar" role="progressbar"
+                                            style="width: {{ $court->percentage }}%; 
+                                            background-color: {{ $index == 0 ? '#FF6700' : ($index == 1 ? '#38bdf8' : '#94a3b8') }}; 
+                                            border-radius: 10px;">
+                                        </div>
+                                    </div>
+                                    <small class="text-white-50"
+                                        style="font-size: 0.7rem; width: 80px; text-align: right;">Rp
+                                        {{ $court->revenue }}</small>
                                 </div>
                             </div>
-                        @endforeach
-                    </div>
-                    <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 text-center">
-                        <a href="/admin/monitoring" class="btn btn-outline-light btn-sm rounded-pill px-4">Buka Monitor
-                            Penuh</a>
+                        @empty
+                            <div class="text-center py-4 text-white-50 small">Belum ada data lapangan.</div>
+                        @endforelse
                     </div>
                 </div>
             </div>
@@ -367,7 +388,7 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // 1. Set Tanggal
+            // 1. Set Tanggal Hari Ini
             const dateOptions = {
                 weekday: 'long',
                 year: 'numeric',
@@ -375,18 +396,25 @@
                 day: 'numeric'
             };
             document.getElementById('currentDate').textContent = new Date().toLocaleDateString('id-ID',
-            dateOptions);
+                dateOptions);
+
+            // --- MENGAMBIL DATA DARI CONTROLLER ---
+            // Blade mengubah array PHP menjadi JSON Javascript
+            const labels = @json($chartLabels);
+            const bookingData = @json($bookingData);
+            const revenueData = @json($revenueData);
+            const sportData = @json($sportPercentages);
 
             // 2. MIXED CHART (Traffic & Occupancy)
             var trafficOptions = {
                 series: [{
                     name: 'Total Booking',
                     type: 'column',
-                    data: [44, 55, 57, 56, 61, 58, 63]
+                    data: bookingData // Data Real
                 }, {
                     name: 'Pendapatan (Juta)',
                     type: 'line',
-                    data: [76, 85, 101, 98, 87, 105, 91]
+                    data: revenueData // Data Real
                 }],
                 chart: {
                     height: 350,
@@ -403,14 +431,14 @@
                 plotOptions: {
                     bar: {
                         columnWidth: '40%',
-                        borderRadius: 8
+                        borderRadius: 6
                     }
                 },
                 dataLabels: {
                     enabled: false
                 },
-                labels: ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'],
-                colors: ['#FF6700', '#1e293b'], // Orange untuk Bar, Navy untuk Line
+                labels: labels, // Label Hari (Sen, Sel, dll)
+                colors: ['#FF6700', '#1e293b'], // Orange (Booking), Navy (Revenue)
                 xaxis: {
                     axisBorder: {
                         show: false
@@ -429,7 +457,7 @@
                 }, {
                     opposite: true,
                     title: {
-                        text: 'Pendapatan',
+                        text: 'Pendapatan (Juta)',
                         style: {
                             color: '#1e293b'
                         }
@@ -440,22 +468,33 @@
                 },
                 grid: {
                     borderColor: '#f1f5f9'
+                },
+                tooltip: {
+                    y: {
+                        formatter: function(val, {
+                            seriesIndex
+                        }) {
+                            if (seriesIndex === 1) return "Rp " + val + " Juta";
+                            return val + " Bookings";
+                        }
+                    }
                 }
             };
 
             var trafficChart = new ApexCharts(document.querySelector("#trafficChart"), trafficOptions);
             trafficChart.render();
 
-            // 3. DONUT CHART (Popular Sports)
+            // 3. DONUT CHART (Kategori Populer)
             var sportsOptions = {
-                series: [45, 30, 25], // Badminton, Futsal, Tennis
+                series: sportData, // Data Real [Badminton, Futsal, Tennis]
                 chart: {
                     type: 'donut',
                     height: 250,
                     fontFamily: 'Plus Jakarta Sans, sans-serif'
                 },
+                // Label Legend
                 labels: ['Badminton', 'Futsal', 'Tennis'],
-                colors: ['#FF6700', '#1e293b', '#f59e0b'], // Sesuaikan dengan tema
+                colors: ['#FF6700', '#1e293b', '#f59e0b'],
                 plotOptions: {
                     pie: {
                         donut: {
@@ -471,7 +510,7 @@
                                     fontWeight: 700,
                                     color: '#1e293b',
                                     formatter: function(val) {
-                                        return val + "%"
+                                        return val
                                     }
                                 },
                                 total: {
@@ -481,7 +520,7 @@
                                     fontSize: '14px',
                                     color: '#64748b',
                                     formatter: function(w) {
-                                        return "Populer"; // Teks tengah donut
+                                        return w.globals.seriesTotals.reduce((a, b) => a + b, 0);
                                     }
                                 }
                             }
@@ -493,7 +532,7 @@
                 },
                 legend: {
                     show: false
-                }, // Kita pakai legend custom di HTML
+                }, // Kita pakai custom legend di HTML
                 stroke: {
                     show: false
                 }
