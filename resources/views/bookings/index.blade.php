@@ -103,7 +103,7 @@
 
                             <div class="mt-4">
                                 @if ($booking->status == 'pending')
-                                    <a href="#"
+                                    <a href="{{ route('payment.show', $booking->id) }}"
                                         class="w-full block text-center bg-[#FF6700] text-white text-sm font-bold py-2 rounded-lg hover:bg-red-800 transition">
                                         Lanjutkan Bayar
                                     </a>
