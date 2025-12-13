@@ -60,6 +60,7 @@ class BookingController extends Controller
         ]);
 
         // 4. Redirect dengan pesan Sukses
-        return redirect()->route('my.bookings')->with('success', 'Ulasan berhasil dikirim! Terima kasih.');
+        
+        return redirect()->route('my.bookings')->with('success', 'Rating Terkirim!');
     }
 }
